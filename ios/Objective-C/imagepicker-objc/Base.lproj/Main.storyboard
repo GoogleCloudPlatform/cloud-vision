@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="L5o-lF-hLz">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+    </dependencies>
+    <scenes>
+        <!--Image Picker View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ImagePickerViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="TUx-as-Jf3">
+                                <rect key="frame" x="180" y="87" width="241" height="205"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="205" id="40n-6q-MIR"/>
+                                    <constraint firstAttribute="width" constant="241" id="qRu-Iu-Nhm"/>
+                                </constraints>
+                            </imageView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="NmY-y2-By2">
+                                <rect key="frame" x="290" y="209" width="20" height="20"/>
+                            </activityIndicatorView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KtP-oa-baM">
+                                <rect key="frame" x="204" y="464" width="193" height="30"/>
+                                <state key="normal" title="Choose an image to analyze"/>
+                                <connections>
+                                    <action selector="loadImageButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="WJ3-lX-XsE"/>
+                                </connections>
+                            </button>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="gsl-IP-xdD">
+                                <rect key="frame" x="0.0" y="64" width="600" height="141"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="141" id="qti-tH-2y1"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="fpo-yh-4NM">
+                                <rect key="frame" x="0.0" y="244" width="600" height="167"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="gsl-IP-xdD" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="4a6-sq-pmd"/>
+                            <constraint firstItem="TUx-as-Jf3" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="23" id="Bf1-XY-yJ2"/>
+                            <constraint firstItem="NmY-y2-By2" firstAttribute="top" secondItem="gsl-IP-xdD" secondAttribute="bottom" constant="4" id="Cgv-mT-EyS"/>
+                            <constraint firstItem="fpo-yh-4NM" firstAttribute="leading" secondItem="gsl-IP-xdD" secondAttribute="leading" id="E86-Ed-27N"/>
+                            <constraint firstAttribute="trailing" secondItem="gsl-IP-xdD" secondAttribute="trailing" id="G2T-6n-Rkd"/>
+                            <constraint firstItem="fpo-yh-4NM" firstAttribute="top" secondItem="NmY-y2-By2" secondAttribute="bottom" constant="15" id="Jyw-0f-qqL"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="KtP-oa-baM" secondAttribute="bottom" constant="106" id="Lhw-MM-rjx"/>
+                            <constraint firstItem="gsl-IP-xdD" firstAttribute="trailing" secondItem="fpo-yh-4NM" secondAttribute="trailing" id="QDm-8x-olb"/>
+                            <constraint firstItem="gsl-IP-xdD" firstAttribute="centerX" secondItem="NmY-y2-By2" secondAttribute="centerX" id="Tzk-Zo-tff"/>
+                            <constraint firstItem="TUx-as-Jf3" firstAttribute="centerX" secondItem="NmY-y2-By2" secondAttribute="centerX" id="YWh-7u-b2Y"/>
+                            <constraint firstItem="KtP-oa-baM" firstAttribute="top" secondItem="fpo-yh-4NM" secondAttribute="bottom" constant="53" id="awn-BG-T2U"/>
+                            <constraint firstItem="gsl-IP-xdD" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="rKo-nl-lvR"/>
+                            <constraint firstItem="KtP-oa-baM" firstAttribute="centerX" secondItem="fpo-yh-4NM" secondAttribute="centerX" id="v8w-nO-FYf"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="euw-ke-8cT"/>
+                    <connections>
+                        <outlet property="faceResults" destination="fpo-yh-4NM" id="n5o-UC-kwZ"/>
+                        <outlet property="imageView" destination="TUx-as-Jf3" id="TSr-A1-ixM"/>
+                        <outlet property="labelResults" destination="gsl-IP-xdD" id="DIj-2Z-SRY"/>
+                        <outlet property="spinner" destination="NmY-y2-By2" id="nvz-EB-8Vg"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1260" y="437"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="hwJ-T3-TSK">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="L5o-lF-hLz" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="qBh-bE-Dqg">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="ry9-n2-wTw"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7TU-EW-Dr2" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="448" y="437"/>
+        </scene>
+    </scenes>
+</document>

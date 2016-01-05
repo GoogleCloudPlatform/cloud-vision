@@ -1,0 +1,48 @@
+{#
+# Copyright 2015 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#}
+
+{% extends "template.html" %}
+
+{% block content %}
+  {% for label, img in labels|dictsort %}
+    <div class="label-card mdl-card mdl-shadow--2dp"
+      {% if img %}style="background: url('{{img}}') center / cover;"{% endif %}>
+      <div class="mdl-card__title mdl-card--expand"></div>
+
+      <div class="mdl-card__actions mdl-card--border">
+        <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="/label/{{label}}">
+          {{label}}
+        </a>
+      </div>
+    </div>
+  {% endfor %}
+  {% if not labels %}
+    <div class="crawl-card mdl-card mdl-shadow--2dp">
+      <div class="mdl-card__title mdl-card--expand">
+        <h4>
+          No images have been processed yet.
+        </h4>
+      </div>
+      <div class="mdl-card__actions mdl-card--border">
+        <form method="POST" action="/start_crawler">
+          <button type="submit" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+            Start the crawler
+          </button>
+        </form>
+      </div>
+    </div>
+  {% endif %}
+{% endblock content %}

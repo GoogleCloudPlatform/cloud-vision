@@ -1,0 +1,5 @@
+gcloud==0.8.0
+google-api-python-client==1.4.2
+redis==2.10.5
+requests[security]==2.8.1
+psq==0.2.1

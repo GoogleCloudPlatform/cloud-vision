@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: awwvision-worker
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: awwvision
+        role: worker
+    spec:
+      containers:
+      - name: awwvision-worker
+        image: gcr.io/$GCLOUD_PROJECT/awwvision-worker
+        imagePullPolicy: Always
+        env:
+        - name: GCLOUD_PROJECT
+          value: $GCLOUD_PROJECT
+        - name: REDIS_HOST
+          value: redis-master
