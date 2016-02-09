@@ -78,22 +78,19 @@
     [request setHTTPMethod: @"POST"];
     [request addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     
-    
     // Build our API request
-    NSString *paramsString = [NSString stringWithFormat:
-                              @"{\"requests\":[{"
-                                "\"image\":{"
-                                    "\"content\":\"%@\"" // The base64 image string (imageData) goes here
-                                "},"
-                              "\"features\":[{" // An array of the types of detection you'd like to perform
-                                "\"type\":\"LABEL_DETECTION\","
-                                "\"maxResults\":10},"
-                                "{\"type\":\"FACE_DETECTION\","
-                                "\"maxResults\":10}"
-                              "]}"
-                            "]}", imageData];
+    NSDictionary *paramsDictionary =
+        @{@"requests":@[
+            @{@"image":
+                @{@"content":imageData},
+             @"features":@[
+                @{@"type":@"LABEL_DETECTION",
+                  @"maxResults":@10},
+                @{@"type":@"FACE_DETECTION",
+                  @"maxResults":@10}]}]};
     
-    NSData *requestData = [paramsString dataUsingEncoding:NSUTF8StringEncoding];
+    NSError *error;
+    NSData *requestData = [NSJSONSerialization dataWithJSONObject:paramsDictionary options:0 error:&error];
     [request setHTTPBody: requestData];
 
     // Run the request on a background thread
