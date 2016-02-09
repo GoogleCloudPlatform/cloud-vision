@@ -118,6 +118,7 @@
         NSDictionary *json = [NSJSONSerialization JSONObjectWithData:dataToParse options:kNilOptions error:&e];
         
         NSArray *responses = [json objectForKey:@"responses"];
+        NSLog(@"%@", responses);
         NSDictionary *responseData = [responses objectAtIndex: 0];
         NSDictionary *errorObj = [json objectForKey:@"error"];
         
@@ -146,7 +147,7 @@
                 
                 NSArray *emotions = @[@"joy", @"sorrow", @"surprise", @"anger"];
                 NSMutableDictionary *emotionTotals = [NSMutableDictionary dictionaryWithObjects:@[@0.0,@0.0,@0.0,@0.0]forKeys:@[@"sorrow",@"joy",@"surprise",@"anger"]];
-                NSDictionary *emotionLikelihoods = @{@"VERY_LIKELY": @0.9, @"LIKELY": @0.75, @"POSSIBLE": @0.5, @"UNLIKELY": @0.25, @"VERY_UNLIKELY": @0.1};
+                NSDictionary *emotionLikelihoods = @{@"VERY_LIKELY": @0.9, @"LIKELY": @0.75, @"POSSIBLE": @0.5, @"UNLIKELY": @0.25, @"VERY_UNLIKELY": @0.0};
                 
                 // Sum all detected emotions
                 for (NSDictionary *personData in faceAnnotations) {

@@ -89,7 +89,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                         "maxResults": 10
                     ],
                     [
-                        "type": "TEXT_DETECTION",
+                        "type": "FACE_DETECTION",
                         "maxResults": 10
                     ]
                 ]
@@ -151,7 +151,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                     self.faceResults.text = "People detected: \(numPeopleDetected)\n\nEmotions detected:\n"
                     
                     var emotionTotals: [String: Double] = ["sorrow": 0, "joy": 0, "surprise": 0, "anger": 0]
-                    var emotionLikelihoods: [String: Double] = ["VERY_LIKELY": 0.9, "LIKELY": 0.75, "POSSIBLE": 0.5, "UNLIKELY":0.25, "VERY_UNLIKELY": 0.1]
+                    var emotionLikelihoods: [String: Double] = ["VERY_LIKELY": 0.9, "LIKELY": 0.75, "POSSIBLE": 0.5, "UNLIKELY":0.25, "VERY_UNLIKELY": 0.0]
                     
                     for index in 0..<numPeopleDetected {
                         let personData:JSON = faceAnnotations[index]
