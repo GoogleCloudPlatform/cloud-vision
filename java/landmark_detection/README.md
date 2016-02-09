@@ -1,5 +1,18 @@
-This sample takes in the uri for an object in Google Cloud Storage, and
+# Google Cloud Vision API Java Landmark Detection example
+
+This sample takes in the URI for an object in Google Cloud Storage, and
 identifies the landmark pictured in it.
+
+## Download Maven
+
+This sample uses the [Apache Maven][maven] build system. Before getting started, be
+sure to [download][maven-download] and [install][maven-install] it. When you use
+Maven as described here, it will automatically download the needed client
+libraries.
+
+[maven]: https://maven.apache.org
+[maven-download]: https://maven.apache.org/download.cgi
+[maven-install]: https://maven.apache.org/install.html
 
 ## Setup
 * Create a project with the [Google Cloud Console][cloud-console], and enable
@@ -30,16 +43,7 @@ identifies the landmark pictured in it.
     gsutil acl ch -u service-account@your-project.iam.gserviceaccount.com \
         gs://your-project-bucket/landmark.jpg
     ```
-* This sample uses the [Maven][maven] build system, which should be installed.
-* Build and install the `google-api-services-vision` Maven package (included in
-    this repo) locally.
 
-    ```bash
-    cd ../google-api-services-vision
-    mvn install
-    ```
-
-[maven]: https://maven.apache.org
 [cloud-console]: https://console.cloud.google.com
 [vision-api]: https://console.cloud.google.com/apis/api/vision.googleapis.com/overview?project=_
 [adc]: https://cloud.google.com/docs/authentication#developer_workflow
@@ -53,7 +57,5 @@ To build and run the sample, run the following from this directory:
 
 ```bash
 mvn clean compile assembly:single
-java -cp target/landmark-detection-1.0-SNAPSHOT-jar-with-dependencies.jar \
-    com.google.cloud.vision.samples.landmarkdetection.DetectLandmark \
-    "gs://your-project-bucket/landmark.jpg"
+java -cp target/landmark-detection-1.0-SNAPSHOT-jar-with-dependencies.jar com.google.cloud.vision.samples.landmarkdetection.DetectLandmark "gs://your-project-bucket/landmark.jpg"
 ```

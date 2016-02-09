@@ -28,9 +28,5 @@ dependencies {
     compile 'com.google.api-client:google-api-client-android:1.20.0' exclude module: 'httpclient'
     compile 'com.google.http-client:google-http-client-gson:1.20.0' exclude module: 'httpclient'
 
-    // TODO: Switch to this dependency once the jar is in a public repo
-    // compile 'google-api-services-vision:1.21.0'
-    // Until then, build the jar file from the /java/google-api-services-vision
-    // directory, and stash it in app/libs
-    compile files('libs/google-api-services-vision-v1-rev20160203-1.21.0.jar')
+    compile 'com.google.apis:google-api-services-vision:v1-rev2-1.21.0'
 }

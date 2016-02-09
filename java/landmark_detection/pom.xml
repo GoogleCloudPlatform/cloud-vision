@@ -28,11 +28,9 @@ Copyright 2016 Google Inc. All Rights Reserved.
 
   <dependencies>
     <dependency>
-      <!-- This requires installing manually. Go to the
-           java/google-api-services-vision directory and run `mvn install` -->
       <groupId>com.google.apis</groupId>
       <artifactId>google-api-services-vision</artifactId>
-      <version>v1-rev20160203-1.21.0</version>
+      <version>v1-rev2-1.21.0</version>
     </dependency>
     <dependency>
       <groupId>com.google.api-client</groupId>
