@@ -64,8 +64,14 @@ $ pip install -r requirements.txt
 
 to install necessary libraries.
 
-Then, follow the instructions [here](http://www.nltk.org/data.html) to download
-the necessary `nltk` data.
+Then, install some data needed for `nltk`:
+
+```shell
+$ python -m nltk.downloader stopwords
+$ python -m nltk.downloader punkt
+```
+
+(This data will be installed into a `nltk_data` directory under your home directory.)
 
 ### Set Up to Authenticate With Your Project's Credentials
 
