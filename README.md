@@ -7,18 +7,6 @@ language and mobile platform.
 
 ## Language Examples
 
-### Text Detection Using the Vision API
-
-This sample uses `TEXT_DETECTION` Vision API requests to build an inverted
-index from the stemmed words found in the images, and stores that index in a
-[Redis](redis.io) database. The example uses the
-[nltk](http://www.nltk.org/index.html) (Natural Language Toolkit) library for
-finding stopwords and doing stemming. The resulting index can be queried to find
-images that match a given set of words, and to list text that was found in each
-matching image.
-
-[Documentation and Python Code](https://github.com/GoogleCloudPlatform/cloud-vision/tree/master/python/text)
-
 ### Landmark Detection Using Google Cloud Storage
 
 This sample identifies a landmark within an image stored on
@@ -49,6 +37,18 @@ Vision API to classify (label) images from Reddit's
 in a web application.
 
 [Documentation and Python Code](https://github.com/GoogleCloudPlatform/cloud-vision/tree/master/python/awwvision)
+
+### Text Detection Using the Vision API
+
+This sample uses `TEXT_DETECTION` Vision API requests to build an inverted
+index from the stemmed words found in the images, and stores that index in a
+[Redis](redis.io) database. The example uses the
+[nltk](http://www.nltk.org/index.html) (Natural Language Toolkit) library for
+finding stopwords and doing stemming. The resulting index can be queried to find
+images that match a given set of words, and to list text that was found in each
+matching image.
+
+[Documentation and Python Code](https://github.com/GoogleCloudPlatform/cloud-vision/tree/master/python/text)
 
 ## Mobile Platform Examples
 
