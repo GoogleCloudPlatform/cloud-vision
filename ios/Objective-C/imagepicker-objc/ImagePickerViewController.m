@@ -42,8 +42,25 @@
     [imagePicker dismissViewControllerAnimated:true completion:NULL];
 }
 
+- (UIImage *) resizeImage: (UIImage*) image toSize: (CGSize)newSize {
+    UIGraphicsBeginImageContext(newSize);
+    [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
+}
+
 - (NSString *) base64EncodeImage: (UIImage*)image {
     NSData *imagedata = UIImagePNGRepresentation(image);
+    
+    // Resize the image if it exceeds the 2MB API limit
+    if ([imagedata length] > 2097152) {
+        CGSize oldSize = [image size];
+        CGSize newSize = CGSizeMake(800, oldSize.height / oldSize.width * 800);
+        image = [self resizeImage: image toSize: newSize];
+        imagedata = UIImagePNGRepresentation(image);
+    }
+    
     NSString *base64String = [imagedata base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithCarriageReturn];
     return base64String;
 }
@@ -60,6 +77,7 @@
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     [request setHTTPMethod: @"POST"];
     [request addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    
     
     // Build our API request
     NSString *paramsString = [NSString stringWithFormat:

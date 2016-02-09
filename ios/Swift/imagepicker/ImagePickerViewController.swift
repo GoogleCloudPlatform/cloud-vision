@@ -49,8 +49,25 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         dismissViewControllerAnimated(true, completion: nil)
     }
     
+    func resizeImage(imageSize: CGSize, image: UIImage) -> NSData {
+        UIGraphicsBeginImageContext(imageSize)
+        image.drawInRect(CGRectMake(0, 0, imageSize.width, imageSize.height))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        let resizedImage = UIImagePNGRepresentation(newImage)
+        UIGraphicsEndImageContext()
+        return resizedImage!
+    }
+    
     func base64EncodeImage(image: UIImage) -> String {
-        let imagedata = UIImagePNGRepresentation(image)
+        var imagedata = UIImagePNGRepresentation(image)
+        
+        // Resize the image if it exceeds the 2MB API limit
+        if (imagedata?.length > 2097152) {
+            let oldSize: CGSize = image.size
+            let newSize: CGSize = CGSizeMake(800, oldSize.height / oldSize.width * 800)
+            imagedata = resizeImage(newSize, image: image)
+        }
+        
         return imagedata!.base64EncodedStringWithOptions(.EncodingEndLineWithCarriageReturn)
     }
     
