@@ -28,6 +28,18 @@ Google Cloud Storage.
 
 [Documentation and Python Code](https://github.com/GoogleCloudPlatform/cloud-vision/tree/master/python/landmark_detection/)
 
+### Face Detection
+
+See the [face detection](https://cloud.google.com/vision/docs/face-tutorial) tutorial in the docs.
+
+[Python Code](https://github.com/GoogleCloudPlatform/cloud-vision/tree/master/python/face_detection)
+
+### Label Detection
+
+See the [label detection](https://cloud.google.com/vision/docs/label-tutorial) tutorial in the docs.
+
+[Python Code](https://github.com/GoogleCloudPlatform/cloud-vision/tree/master/python/label)
+
 ### Label Tagging Using Kubernetes
 
 *Awwvision* is a [Kubernetes](https://github.com/kubernetes/kubernetes/) and
