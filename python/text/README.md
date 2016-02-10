@@ -40,9 +40,26 @@ for information about enabling the Cloud Vision API for your project.
 
 ### Download the Example Code
 
-To download the example code, visit
-[https://dev-partners.googlesource.com/cloud/vision/+archive/master/python/text.tar.gz](https://dev-partners.googlesource.com/cloud/vision/+archive/master/python/text.tar.gz).
-You must be whitelisted for access.
+Download the code from this repository.
+
+If you have [`git`](https://git-scm.com/) installed, you can do this
+by executing the following command:
+
+```shell
+$ git clone https://github.com/GoogleCloudPlatform/cloud-vision.git
+```
+
+This will download the repository of samples into the directory
+`cloud-vision`.
+
+Otherwise, github offers an
+[auto-generated zip file](https://github.com/GoogleCloudPlatform/cloud-vision/archive/master.zip) of the
+`master` branch, which you can download and extract.
+
+Either method will include the desired subdirectory
+`python/text`.  Change to the `python/text` directory under `cloud-vision`.
+The rest of the tutorial assumes this as your working directory.
+
 
 This example requires Python 2.7.
 
