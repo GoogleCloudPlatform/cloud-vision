@@ -1,7 +1,5 @@
 # Image detection with iOS Photos
 
-**This is not an official Google product.**
-
 This app demonstrates how to use the [Cloud Vision API](https://cloud.google.com/vision/) to run label and face detection on an image.
 
 ## Local Setup
