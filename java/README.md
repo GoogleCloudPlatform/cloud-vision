@@ -36,7 +36,6 @@ libraries.
 
 This sample annotates an image with labels based on its content.
 
-- [Quickstart Walkthrough](https://cloud.google.com/vision/docs/label-tutorial) (Python)
 - [Java Code](https://github.com/GoogleCloudPlatform/cloud-vision/tree/master/java/label/)
 
 ### Face Detection
