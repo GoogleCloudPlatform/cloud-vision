@@ -26,7 +26,7 @@ identifies the landmark pictured in it.
     # explicitly give the service account access to the image. This email can
     # be found by running:
     # `grep client_email /path/to/your-project-credentials.json`
-    gsutil acl ch -u <service-account@your-project.iam.gserviceaccount.com> \
+    gsutil acl ch -u <service-account@your-project.iam.gserviceaccount.com>:R \
         gs://<your-project-bucket>/landmark.jpg
     ```
 
