@@ -61,7 +61,7 @@ Either method will include the desired subdirectory
 The rest of the tutorial assumes this as your working directory.
 
 
-This example requires Python 2.7.
+This example has been tested with Python 2.7.
 
 ### Install the Libraries Used by the Example
 
