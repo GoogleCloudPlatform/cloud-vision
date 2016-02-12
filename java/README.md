@@ -1,5 +1,7 @@
 # Google Cloud Vision API Java examples
 
+This directory contains [Cloud Vision API](https://cloud.google.com/vision/) Java samples.
+
 ## Prerequisites
 
 ### Download Maven
@@ -36,19 +38,19 @@ libraries.
 
 This sample annotates an image with labels based on its content.
 
-- [Java Code](https://github.com/GoogleCloudPlatform/cloud-vision/tree/master/java/label/)
+- [Java Code](label)
 
 ### Face Detection
 
 This sample identifies faces within an image.
 
 - [Quickstart Walkthrough](https://cloud.google.com/vision/docs/face-tutorial)
-- [Java Code](https://github.com/GoogleCloudPlatform/cloud-vision/tree/master/java/face_detection/)
+- [Java Code](face_detection)
 
 ### Landmark Detection Using Google Cloud Storage
 
 This sample identifies a landmark within an image stored on
 Google Cloud Storage.
 
-- [Documentation and Java Code](https://github.com/GoogleCloudPlatform/cloud-vision/tree/master/java/landmark_detection/)
+- [Documentation and Java Code](landmark_detection)
 
