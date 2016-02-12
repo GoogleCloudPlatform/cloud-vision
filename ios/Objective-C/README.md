@@ -1,4 +1,4 @@
-# Image detection with iOS Device Photos
+# Cloud Vision Objective-C Sample
 
 This app demonstrates how to use the [Cloud Vision API](https://cloud.google.com/vision/) to run label and face detection on an image.
 
