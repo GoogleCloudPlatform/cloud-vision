@@ -36,8 +36,3 @@ To build and run the sample:
 mvn clean compile assembly:single
 java -cp target/label-1.0-SNAPSHOT-jar-with-dependencies.jar com.google.cloud.vision.samples.label.LabelApp ../../data/label/cat.jpg
 ```
-
-For more information about image labeling see the [Quickstart][quickstart]
-guide (Python).
-
-[quickstart]: https://cloud.google.com/vision/docs/face-tutorial

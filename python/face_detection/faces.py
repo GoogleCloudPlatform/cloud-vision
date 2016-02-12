@@ -28,7 +28,6 @@ from oauth2client.client import GoogleCredentials
 
 
 # [START get_vision_service]
-# The url template to retrieve the discovery document for trusted testers.
 DISCOVERY_URL='https://{api}.googleapis.com/$discovery/rest?version={apiVersion}'
 
 

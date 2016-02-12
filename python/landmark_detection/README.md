@@ -20,14 +20,14 @@ identifies the landmark pictured in it.
     might do:
 
     ```bash
-    gsutil mb gs://your-project-bucket
-    gsutil cp landmark.jpg gs://your-project-bucket/landmark.jpg
+    gsutil mb gs://<your-project-bucket>
+    gsutil cp landmark.jpg gs://<your-project-bucket>/landmark.jpg
     # This step is unnecessary with default permissions, but for completeness,
     # explicitly give the service account access to the image. This email can
     # be found by running:
     # `grep client_email /path/to/your-project-credentials.json`
-    gsutil acl ch -u service-account@your-project.iam.gserviceaccount.com \
-        gs://your-project-bucket/landmark.jpg
+    gsutil acl ch -u <service-account@your-project.iam.gserviceaccount.com>:R \
+        gs://<your-project-bucket>/landmark.jpg
     ```
 
 [cloud-console]: https://console.cloud.google.com
@@ -38,4 +38,16 @@ identifies the landmark pictured in it.
 
 ## Run the sample
 
-    ./detect_landmark gs://your-project-bucket/landmark.jpg
+If you've successfully uploaded your object to your Cloud Storage bucket, and
+set the appropriate access controls, you should now be able to run the sample as
+follows:
+
+    ./detect_landmark.py gs://<your-project-bucket>/landmark.jpg
+
+For your convenience, you're also welcome to test the landmark detection script
+on the [image][landmark.jpg] we use for testing, which we've made
+publicly-accessible:
+
+    ./detect_landmark.py gs://cloud-samples-tests/vision/water.jpg
+
+[landmark.jpg]: https://cloud-samples-tests.storage.googleapis.com/vision/water.jpg

@@ -34,14 +34,14 @@ libraries.
     might do:
 
     ```bash
-    gsutil mb gs://your-project-bucket
-    gsutil cp landmark.jpg gs://your-project-bucket/landmark.jpg
+    gsutil mb gs://<your-project-bucket>
+    gsutil cp landmark.jpg gs://<your-project-bucket>/landmark.jpg
     # This step is unnecessary with default permissions, but for completeness,
     # explicitly give the service account access to the image. This email can
     # be found by running:
     # `grep client_email /path/to/your-project-credentials.json`
-    gsutil acl ch -u service-account@your-project.iam.gserviceaccount.com \
-        gs://your-project-bucket/landmark.jpg
+    gsutil acl ch -u <service-account@your-project.iam.gserviceaccount.com>:R \
+        gs://<your-project-bucket>/landmark.jpg
     ```
 
 [cloud-console]: https://console.cloud.google.com

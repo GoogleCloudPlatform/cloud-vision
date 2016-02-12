@@ -35,8 +35,7 @@ This app demonstrates how to use the [Cloud Vision API](https://cloud.google.com
     This will download the repository of samples into the directory
     `cloud-vision`.
 
-    Otherwise, GitHub offers an [auto-generated zip file][vision-zip] of the
-    `master` branch, which you can download and extract. Either method will include the desired directory at
+    Otherwise, GitHub offers an [auto-generated zip file][vision-zip] of the `master` branch, which you can download and extract. Either method will include the desired directory at
     `cloud-vision/ios/Swift`.
 
 - `cd` into the `cloud-vision/ios/Swift` directory you just cloned. The app uses the `SwiftyJSON` pod to parse the JSON response. This pod is defined in the `Podfile`, and you can install it by running `pod install`.

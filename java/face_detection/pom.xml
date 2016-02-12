@@ -27,6 +27,7 @@ Copyright 2016 Google Inc. All Rights Reserved.
   </properties>
 
   <dependencies>
+    <!-- [START dependencies] -->
     <dependency>
       <groupId>com.google.apis</groupId>
       <artifactId>google-api-services-vision</artifactId>
@@ -37,6 +38,7 @@ Copyright 2016 Google Inc. All Rights Reserved.
       <artifactId>google-api-client</artifactId>
       <version>1.21.0</version>
     </dependency>
+    <!-- [END dependencies] -->
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
