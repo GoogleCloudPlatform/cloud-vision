@@ -41,7 +41,7 @@ filepath_to_image2.png 2:10 3:10
 See https://cloud.google.com/vision/docs/concepts for more detail, and for
 information on using the generated result to send a request to the Vision API.
 """
-
+# [START generate_json]
 import base64
 import collections
 import getopt
@@ -88,7 +88,6 @@ def main(argv):
             if wordCount == 0:
                 imageFile = open(word, 'rb')
                 contentJsonObj['content'] = base64.b64encode(imageFile.read())
-                # print("img:" + word)
             else:
                 detectValues = word.split(":")
                 valueCount = 0
@@ -132,3 +131,4 @@ def getDetectionType(detectNum):
 
 if __name__ == "__main__":
     main(sys.argv[1:])
+# [END generate_json]
