@@ -5,12 +5,13 @@ This app demonstrates how to use the [Cloud Vision API](https://cloud.google.com
 ## Prerequisites
 - An API key for the Cloud Vision API (See
   [the docs][getting-started] to learn more)
-- An iOS device running iOS 9.0 or above
+- An OSX machine or emulator
 - [Xcode 7][xcode]
 - Install [CocoaPods][cocoapods] if you don't have it already by running the command `sudo gem install cocoapods`.
+	- You'll need to have [RubyGems][rubygems] installed in order to install CocoaPods.
 
 ## Quickstart
-- Clone the `Swift` directory from this repository.
+- Clone this repo and `cd` into the `Swift` directory.
 - In `ImagePickerViewController.swift`, replace `YOUR_API_KEY` with the API key obtained above.
 - `cd` into the `Swift` directory and install the `SwiftyJSON` pod by running `pod install`.
 - Open the project by running `open imagepicker.xcworkspace`.
@@ -28,7 +29,7 @@ This app demonstrates how to use the [Cloud Vision API](https://cloud.google.com
   - [Enable billing][billing] and the [Vision API][enable-vision].
   - Create an [API key][api-key], and save this for later.
 
-- Clone this entire `cloud-vision` repository on GitHub. If you have [`git`][git] installed, you can do this by executing the following command:
+- Clone this `cloud-vision` repository on GitHub. If you have [`git`][git] installed, you can do this by executing the following command:
 
         $ git clone https://github.com/GoogleCloudPlatform/cloud-vision.git
 
@@ -64,3 +65,4 @@ This app demonstrates how to use the [Cloud Vision API](https://cloud.google.com
 [enable-vision]: https://console.cloud.google.com/apis/api/vision.googleapis.com/overview?project=_
 [api-key]: https://console.cloud.google.com/apis/credentials?project=_
 [cocoapods]: https://cocoapods.org/
+[rubygems]: https://rubygems.org/pages/download
