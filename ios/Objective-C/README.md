@@ -5,11 +5,11 @@ This app demonstrates how to use the [Cloud Vision API](https://cloud.google.com
 ## Prerequisites
 - An API key for the Cloud Vision API (See
   [the docs][getting-started] to learn more)
-- An iOS device running iOS 9.0 or above
+- An OSX machine or emulator
 - [Xcode 7][xcode]
 
 ## Quickstart
-- Clone the `Objective-C` directory from this repository.
+- Clone this repo and `cd` into the `Objective-C` directory.
 - In `ImagePickerViewController.m`, replace `YOUR_API_KEY` with the API key obtained above.
 - Open the project by running `open imagepicker-objc.xcodeproj` in the `Objective-C` directory.
 - Build and run the app.
@@ -26,7 +26,7 @@ This app demonstrates how to use the [Cloud Vision API](https://cloud.google.com
   - [Enable billing][billing] and the [Vision API][enable-vision].
   - Create an [API key][api-key], and save this for later.
 
-- Clone this entire `cloud-vision` repository on GitHub. If you have [`git`][git] installed, you can do this by executing the following command:
+- Clone this `cloud-vision` repository on GitHub. If you have [`git`][git] installed, you can do this by executing the following command:
 
         $ git clone https://github.com/GoogleCloudPlatform/cloud-vision.git
 
