@@ -190,7 +190,9 @@ from nltk.stem.snowball import EnglishStemmer
 from oauth2client.client import GoogleCredentials
 import redis
 
-DISCOVERY_URL='https://{api}.googleapis.com/$discovery/rest?version={apiVersion}'
+DISCOVERY_URL = 'https://{api}.googleapis.com/$discovery/rest?version={apiVersion}'  # noqa
+BATCH_SIZE = 10
+
 
 class VisionApi:
     """Construct and use the Google Vision API service."""
@@ -198,37 +200,51 @@ class VisionApi:
     def __init__(self, api_discovery_file='vision_api.json'):
         self.credentials = GoogleCredentials.get_application_default()
         self.service = discovery.build(
-            'vision', 'v1', credentials=credentials,
+            'vision', 'v1', credentials=self.credentials,
             discoveryServiceUrl=DISCOVERY_URL)
 
-
-    def detect_text(self, image_file, num_retries=3, max_results=6):
+    def detect_text(self, input_filenames, num_retries=3, max_results=6):
         """Uses the Vision API to detect text in the given file.
         """
-        image_content = image_file.read()
+        images = {}
+        for filename in input_filenames:
+            with open(filename, 'rb') as image_file:
+                images[filename] = image_file.read()
 
-        batch_request = [{
-            'image': {
-                'content': base64.b64encode(image_content)
-            },
-            'features': [{
-                'type': 'TEXT_DETECTION',
-                'maxResults': max_results,
-            }]
-        }]
+        batch_request = []
+        for filename in images:
+            batch_request.append({
+                'image': {
+                    'content': base64.b64encode(images[filename])
+                },
+                'features': [{
+                    'type': 'TEXT_DETECTION',
+                    'maxResults': max_results,
+                }]
+            })
         request = self.service.images().annotate(
             body={'requests': batch_request})
 
         try:
-            response = request.execute(num_retries=num_retries)
-            if ('responses' in response
-               and 'textAnnotations' in response['responses'][0]):
-                text_response = response['responses'][0]['textAnnotations']
-                return text_response
-            else:
-                return []
+            responses = request.execute(num_retries=num_retries)
+            if 'responses' not in responses:
+                return {}
+            text_response = {}
+            for filename, response in zip(images, responses['responses']):
+                if 'error' in response:
+                    print("API Error for %s: %s" % (
+                            filename,
+                            response['error']['message']
+                            if 'message' in response['error']
+                            else ''))
+                    continue
+                if 'textAnnotations' in response:
+                    text_response[filename] = response['textAnnotations']
+                else:
+                    text_response[filename] = []
+            return text_response
         except errors.HttpError, e:
-            print("Http Error for %s: %s" % (image_file, e))
+            print("Http Error for %s: %s" % (filename, e))
         except KeyError, e2:
             print("Key error: %s" % e2)
 ```
@@ -259,15 +275,21 @@ index. In the `extract_descriptions` function, we concatenate all the
 `Index.add()` method is called with the filename and the "document".
 
 ```python
+def extract_description(texts):
+    """Returns all the text in text annotations as a single string"""
+    document = ''
+    for text in texts:
+        try:
+            document += text['description']
+        except KeyError, e:
+            print('KeyError: %s\n%s' % (e, text))
+    return document
+
+
 def extract_descriptions(input_filename, index, texts):
     """Gets and indexes the text that was detected in the image."""
     if texts:
-        document = ''
-        for text in texts:
-            try:
-                document += text['description']
-            except KeyError, e:
-                print('KeyError: %s' % text)
+        document = extract_description(texts)
         index.add(input_filename, document)
         sys.stdout.write('.')  # Output a progress indicator.
         sys.stdout.flush()
@@ -302,17 +324,33 @@ $ ./textindex.py <path-to-image-directory>
 (A "memes" site is a good place to find sample images).
 
 The Vision API client object is created, and the `Index()` object is created.
-Then, for each file in the directory that has not already been processed, the
-`get_text_from_file()` function is passed these two objects and the unprocessed
-file. (We're also using Redis to track the files already processed). Any text
-is extracted and added to the index.
+Then, for each batch of files in the directory that have not already been
+processed, the `get_text_from_files()` function is passed these two objects and
+the unprocessed files. (We're also using Redis to track the files already
+processed). Any text is extracted and added to the index.
 
 ```python
-def get_text_from_file(vision, index, input_filename):
+def get_text_from_files(vision, index, input_filenames):
     """Call the Vision API on a file and index the results."""
-    with open(input_filename, 'rb') as image:
-        texts = vision.detect_text(image)
-        extract_descriptions(input_filename, index, texts)
+    texts = vision.detect_text(input_filenames)
+    for filename, text in texts.items():
+        extract_descriptions(filename, index, text)
+
+
+def batch(iterable, batch_size=BATCH_SIZE):
+    """Group an iterable into batches of size batch_size.
+
+    >>> tuple(batch([1, 2, 3, 4, 5], batch_size=2))
+    ((1, 2), (3, 4), (5))
+    """
+    b = []
+    for i in iterable:
+        b.append(i)
+        if len(b) == batch_size:
+            yield tuple(b)
+            b = []
+    if b:
+        yield tuple(b)
 
 
 def main(input_dir):
@@ -325,18 +363,22 @@ def main(input_dir):
     # Create an Index object to build query the inverted index.
     index = Index()
 
-    fileslist = []
+    allfileslist = []
     # Recursively construct a list of all the files in the given input
     # directory.
     for folder, subs, files in os.walk(input_dir):
         for filename in files:
-            fileslist.append(os.path.join(folder, filename))
+            allfileslist.append(os.path.join(folder, filename))
 
-    for filename in fileslist:
+    fileslist = []
+    for filename in allfileslist:
         # Look for text in any files that have not yet been processed.
         if index.document_is_processed(filename):
             continue
-        get_text_from_file(vision, index, filename)
+        fileslist.append(filename)
+
+    for filenames in batch(fileslist):
+        get_text_from_files(vision, index, filenames)
 ```
 
 Because we're using Redis to track the files already processed, this script can
