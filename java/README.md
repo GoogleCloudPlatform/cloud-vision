@@ -54,3 +54,15 @@ Google Cloud Storage.
 
 - [Documentation and Java Code](landmark_detection)
 
+### Text Detection Using the Vision API
+
+This sample uses `TEXT_DETECTION` Vision API requests to build an inverted index
+from the stemmed words found in the images, and stores that index in a
+[Redis](redis.io) database.  The example uses the
+[OpenNLP](https://opennlp.apache.org/) library (Open Natural Language
+Processing) for finding stopwords and doing stemming. The resulting index can be
+queried to find images that match a given set of words, and to list text that
+was found in each matching image.
+
+[Documentation and Java Code](text)
+

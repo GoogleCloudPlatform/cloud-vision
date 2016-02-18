@@ -43,13 +43,16 @@ in a web application.
 
 This sample uses `TEXT_DETECTION` Vision API requests to build an inverted
 index from the stemmed words found in the images, and stores that index in a
-[Redis](redis.io) database. The example uses the
-[nltk](http://www.nltk.org/index.html) (Natural Language Toolkit) library for
-finding stopwords and doing stemming. The resulting index can be queried to find
+[Redis](redis.io) database. The resulting index can be queried to find
 images that match a given set of words, and to list text that was found in each
 matching image.
 
+For finding stopwords and doing stemming, the Python example uses the
+[nltk](http://www.nltk.org/index.html) (Natural Language Toolkit) library.
+The Java example uses the [OpenNLP](https://opennlp.apache.org/) library.
+
 - [Documentation and Python Code](python/text)
+- [Documentation and Java Code](java/text)
 
 ## Mobile Platform Examples
 
