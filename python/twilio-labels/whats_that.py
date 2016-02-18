@@ -27,7 +27,7 @@ from oauth2client.client import GoogleCredentials
 import requests
 from random import randint
 
-DISCOVERY_URL = 'https://{api}.googleapis.com/$discovery/rest?version={apiVersion}&labels=TRUSTED_TESTER'
+DISCOVERY_URL = 'https://{api}.googleapis.com/$discovery/rest?version={apiVersion}'
 ACCEPTABLE_FILE_TYPES = ["image/jpeg", "image/png", "image/jpg"]
 DEFAULT_PRETEXT = ("Your message has been passed to the Google Cloud "
                    "Vision API for processing.\n Images are not stored in "
@@ -39,6 +39,8 @@ app = Flask(__name__)
 
 @app.route("/", methods=['GET', 'POST'])
 def receive_message():
+    """Run a label request on an image received from Twilio"""
+
     labels = None
 
     # Go through and process attachments
@@ -52,7 +54,7 @@ def receive_message():
             # Go get the image
             media_url = request.values.get('MediaUrl%i' % i, None)
 
-            image = parse_attachment(media_url)
+            image = requests.get(media_url).content
 
             # Query the API
             labels = get_labels(image)
@@ -68,6 +70,7 @@ def receive_message():
 
 
 def construct_message(labels):
+    """Build up the response from the labels found"""
 
     # We'll use this to construct our response
     response_text = DEFAULT_PRETEXT
@@ -89,14 +92,8 @@ def construct_message(labels):
     return resp
 
 
-def parse_attachment(media_url):
-
-    # Get the image from teh interwebz
-    r = requests.get(media_url)
-    return r.content
-
-
 def get_labels(image, num_retries=3, max_results=3):
+    """Given an image, execute the label request"""
 
     labels = ""
 
@@ -105,7 +102,7 @@ def get_labels(image, num_retries=3, max_results=3):
     credentials = GoogleCredentials.get_application_default().create_scoped(
         ['https://www.googleapis.com/auth/cloud-platform'])
     credentials.authorize(http)
-    service = discovery.build('vision', 'v1alpha1', http=http,
+    service = discovery.build('vision', 'v1', http=http,
                               discoveryServiceUrl=DISCOVERY_URL)
 
     # Prepare the image for the API
