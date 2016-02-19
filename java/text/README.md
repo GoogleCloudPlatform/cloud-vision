@@ -1,5 +1,18 @@
 # Text Detection using the Vision API
 
+This sample requires Java 8.
+
+## Download Maven
+
+This sample uses the [Apache Maven][maven] build system. Before getting started, be
+sure to [download][maven-download] and [install][maven-install] it. When you use
+Maven as described here, it will automatically download the needed client
+libraries.
+
+[maven]: https://maven.apache.org
+[maven-download]: https://maven.apache.org/download.cgi
+[maven-install]: https://maven.apache.org/install.html
+
 ## Introduction
 
 This example uses the [Cloud Vision API](https://cloud.google.com/vision/) to

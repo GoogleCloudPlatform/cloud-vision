@@ -17,6 +17,7 @@
 package com.google.cloud.vision.samples.text;
 
 import com.google.api.services.vision.v1.model.EntityAnnotation;
+import com.google.api.services.vision.v1.model.Status;
 import com.google.auto.value.AutoValue;
 
 import java.nio.file.Path;
@@ -39,7 +40,7 @@ abstract class ImageText {
   public abstract List<EntityAnnotation> textAnnotations();
 
   @Nullable
-  public abstract Exception error();
+  public abstract Status error();
 
   @AutoValue.Builder
   public abstract static class Builder {
@@ -47,7 +48,7 @@ abstract class ImageText {
 
     public abstract Builder textAnnotations(List<EntityAnnotation> ts);
 
-    public abstract Builder error(@Nullable Exception ex);
+    public abstract Builder error(@Nullable Status err);
 
     public abstract ImageText build();
   }
