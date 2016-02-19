@@ -5,5 +5,9 @@
     <string name="image_preview_header">Preview:</string>
     <string name="loading_message">Uploading image. Please wait.</string>
 
+    <string name="dialog_select_prompt">Choose a picture</string>
+    <string name="dialog_select_camera">Camera</string>
+    <string name="dialog_select_gallery">Gallery</string>
+
     <string name="image_picker_error">Something is wrong with that image. Pick a different one please.</string>
 </resources>
