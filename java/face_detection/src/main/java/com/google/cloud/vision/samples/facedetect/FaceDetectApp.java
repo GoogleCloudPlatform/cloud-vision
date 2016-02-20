@@ -24,6 +24,7 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.vision.v1.Vision;
 import com.google.api.services.vision.v1.VisionScopes;
 import com.google.api.services.vision.v1.model.AnnotateImageRequest;
+import com.google.api.services.vision.v1.model.AnnotateImageResponse;
 import com.google.api.services.vision.v1.model.BatchAnnotateImagesRequest;
 import com.google.api.services.vision.v1.model.BatchAnnotateImagesResponse;
 import com.google.api.services.vision.v1.model.FaceAnnotation;
@@ -130,8 +131,16 @@ public class FaceDetectApp {
     // Due to a bug: requests to Vision API containing large images fail when GZipped.
     annotate.setDisableGZipContent(true);
 
-    BatchAnnotateImagesResponse response = annotate.execute();
-    return response.getResponses().get(0).getFaceAnnotations();
+    BatchAnnotateImagesResponse batchResponse = annotate.execute();
+    assert batchResponse.getResponses().size() == 1;
+    AnnotateImageResponse response = batchResponse.getResponses().get(0);
+    if (response.getFaceAnnotations() == null) {
+      throw new IOException(
+          response.getError() != null
+              ? response.getError().getMessage()
+              : "Unknown error getting image annotations");
+    }
+    return response.getFaceAnnotations();
   }
   // [END detect_face]
 

@@ -26,6 +26,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.io.IOException;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
@@ -58,11 +59,9 @@ public class DetectLandmarkTest {
 
     try {
       appUnderTest.identifyLandmark(LANDMARK_URI + "/nonexistent.jpg", MAX_RESULTS);
-      fail("Expected GoogleJsonResponseException");
-    } catch (GoogleJsonResponseException expected) {
-      assertThat(expected.getDetails().getCode())
-          .named("GoogleJsonResponseException Error Code")
-          .isEqualTo(HttpServletResponse.SC_NOT_FOUND);
+      fail("Expected IOException");
+    } catch (IOException expected) {
+      assertThat(expected.getMessage()).named("IOException message").contains("OBJECT_NOT_FOUND");
     }
   }
 
@@ -71,11 +70,9 @@ public class DetectLandmarkTest {
 
     try {
       appUnderTest.identifyLandmark(PRIVATE_LANDMARK_URI, MAX_RESULTS);
-      fail("Expected GoogleJsonResponseException");
-    } catch (GoogleJsonResponseException expected) {
-      assertThat(expected.getDetails().getCode())
-          .named("GoogleJsonResponseException Error Code")
-          .isEqualTo(HttpServletResponse.SC_FORBIDDEN);
+      fail("Expected IOException");
+    } catch (IOException expected) {
+      assertThat(expected.getMessage()).named("IOException message").contains("ACCESS_DENIED");
     }
   }
 }

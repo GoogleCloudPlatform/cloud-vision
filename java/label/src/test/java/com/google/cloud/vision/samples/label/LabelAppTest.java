@@ -29,6 +29,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Paths;
 import java.util.List;
@@ -63,11 +64,11 @@ public class LabelAppTest {
 
     try {
       appUnderTest.labelImage(Paths.get("../../data/bad.txt"), MAX_LABELS);
-      fail("Expected GoogleJsonResponseException");
-    } catch (GoogleJsonResponseException expected) {
-      assertThat(expected.getDetails().getCode())
-          .named("GoogleJsonResponseException Error Code")
-          .isEqualTo(HttpServletResponse.SC_BAD_REQUEST);
+      fail("Expected IOException");
+    } catch (IOException expected) {
+      assertThat(expected.getMessage().toLowerCase())
+          .named("IOException message")
+          .contains("malformed request");
     }
   }
 
