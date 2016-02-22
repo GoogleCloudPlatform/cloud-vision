@@ -24,6 +24,7 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.vision.v1.Vision;
 import com.google.api.services.vision.v1.VisionScopes;
 import com.google.api.services.vision.v1.model.AnnotateImageRequest;
+import com.google.api.services.vision.v1.model.AnnotateImageResponse;
 import com.google.api.services.vision.v1.model.BatchAnnotateImagesRequest;
 import com.google.api.services.vision.v1.model.BatchAnnotateImagesResponse;
 import com.google.api.services.vision.v1.model.EntityAnnotation;
@@ -132,8 +133,16 @@ public class LabelApp {
     // [END construct_request]
 
     // [START parse_response]
-    BatchAnnotateImagesResponse response = annotate.execute();
-    return response.getResponses().get(0).getLabelAnnotations();
+    BatchAnnotateImagesResponse batchResponse = annotate.execute();
+    assert batchResponse.getResponses().size() == 1;
+    AnnotateImageResponse response = batchResponse.getResponses().get(0);
+    if (response.getLabelAnnotations() == null) {
+      throw new IOException(
+          response.getError() != null
+              ? response.getError().getMessage()
+              : "Unknown error getting image annotations");
+    }
+    return response.getLabelAnnotations();
     // [END parse_response]
   }
 }

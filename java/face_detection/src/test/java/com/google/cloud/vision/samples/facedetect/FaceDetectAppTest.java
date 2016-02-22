@@ -32,6 +32,7 @@ import org.junit.runners.JUnit4;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
 
@@ -62,11 +63,11 @@ public class FaceDetectAppTest {
 
     try {
       appUnderTest.detectFaces(Paths.get("../../data/bad.txt"), MAX_RESULTS);
-      fail("Expected GoogleJsonResponseException");
-    } catch (GoogleJsonResponseException expected) {
-      assertThat(expected.getDetails().getCode())
-          .named("GoogleJsonResponseException Error Code")
-          .isEqualTo(HttpServletResponse.SC_BAD_REQUEST);
+      fail("Expected IOException");
+    } catch (IOException expected) {
+      assertThat(expected.getMessage().toLowerCase())
+          .named("IOException message")
+          .contains("malformed request");
     }
   }
 
