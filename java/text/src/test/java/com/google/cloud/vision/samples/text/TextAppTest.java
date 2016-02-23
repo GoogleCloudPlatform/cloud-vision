@@ -32,6 +32,7 @@ import org.junit.runners.JUnit4;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
@@ -45,10 +46,11 @@ public class TextAppTest {
     TextApp appUnderTest = new TextApp(TextApp.getVisionService(), null /* index */);
 
     // Act
-    ImageText image = appUnderTest.detectText(Paths.get("../../data/text/wakeupcat.jpg"));
+    List<ImageText> image =
+        appUnderTest.detectText(ImmutableList.<Path>of(Paths.get("../../data/text/wakeupcat.jpg")));
 
     // Assert
-    assertThat(image.path().toString())
+    assertThat(image.get(0).path().toString())
         .named("wakeupcat.jpg path")
         .isEqualTo("../../data/text/wakeupcat.jpg");
   }
@@ -56,10 +58,11 @@ public class TextAppTest {
   @Test public void extractDescriptions_withImage_returnsText() throws Exception {
     // Arrange
     TextApp appUnderTest = new TextApp(TextApp.getVisionService(), null /* index */);
-    ImageText image = appUnderTest.detectText(Paths.get("../../data/text/wakeupcat.jpg"));
+    List<ImageText> image =
+        appUnderTest.detectText(ImmutableList.<Path>of(Paths.get("../../data/text/wakeupcat.jpg")));
 
     // Act
-    Word word = appUnderTest.extractDescriptions(image);
+    Word word = appUnderTest.extractDescriptions(image.get(0));
 
     // Assert
     assertThat(word.path().toString())

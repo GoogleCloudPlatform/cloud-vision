@@ -23,13 +23,17 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.vision.v1.Vision;
 import com.google.api.services.vision.v1.VisionScopes;
 import com.google.api.services.vision.v1.model.AnnotateImageRequest;
+import com.google.api.services.vision.v1.model.AnnotateImageResponse;
 import com.google.api.services.vision.v1.model.BatchAnnotateImagesRequest;
 import com.google.api.services.vision.v1.model.BatchAnnotateImagesResponse;
 import com.google.api.services.vision.v1.model.EntityAnnotation;
 import com.google.api.services.vision.v1.model.Feature;
 import com.google.api.services.vision.v1.model.Image;
+import com.google.api.services.vision.v1.model.Status;
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 
 import opennlp.tools.stemmer.snowball.SnowballStemmer;
 import opennlp.tools.tokenize.TokenizerME;
@@ -43,6 +47,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -51,6 +56,7 @@ import java.util.List;
 @SuppressWarnings("serial")
 public class TextApp {
   private static final int MAX_RESULTS = 6;
+  private static final int BATCH_SIZE = 10;
 
   /**
    * Be sure to specify the name of your application. If the application name is {@code null} or
@@ -144,53 +150,73 @@ public class TextApp {
    * Indexes all the images in the {@code inputPath} directory for text.
    */
   public void indexDirectory(Path inputPath) throws IOException {
-    Files.walk(inputPath)
-        .filter(Files::isRegularFile)
-        .filter(index::isDocumentUnprocessed)
+    List<Path> unprocessedImages =
+        Files.walk(inputPath)
+            .filter(Files::isRegularFile)
+            .filter(index::isDocumentUnprocessed)
+            .collect(Collectors.toList());
+    Lists.<Path>partition(unprocessedImages, BATCH_SIZE)
+        .stream()
         .map(this::detectText)
+        .flatMap(l -> l.stream())
         .filter(this::successfullyDetectedText)
         .map(this::extractDescriptions)
         .forEach(index::addDocument);
   }
 
   /**
-   * Gets up to {@code maxResults} text annotation for an image stored at {@code path}.
+   * Gets up to {@code maxResults} text annotations for images stored at {@code paths}.
    */
-  public ImageText detectText(Path path) {
+  public ImmutableList<ImageText> detectText(List<Path> paths) {
+    ImmutableList.Builder<AnnotateImageRequest> requests = ImmutableList.builder();
     try {
-      byte[] data;
-      data = Files.readAllBytes(path);
+      for (Path path : paths) {
+        byte[] data;
+        data = Files.readAllBytes(path);
+        requests.add(
+            new AnnotateImageRequest()
+                .setImage(new Image().encodeContent(data))
+                .setFeatures(ImmutableList.of(
+                    new Feature()
+                        .setType("TEXT_DETECTION")
+                        .setMaxResults(MAX_RESULTS))));
+      }
 
-      AnnotateImageRequest request =
-          new AnnotateImageRequest()
-              .setImage(new Image().encodeContent(data))
-              .setFeatures(ImmutableList.of(
-                  new Feature()
-                      .setType("TEXT_DETECTION")
-                      .setMaxResults(MAX_RESULTS)));
       Vision.Images.Annotate annotate =
           vision.images()
-              .annotate(new BatchAnnotateImagesRequest().setRequests(ImmutableList.of(request)));
+              .annotate(new BatchAnnotateImagesRequest().setRequests(requests.build()));
       // Due to a bug: requests to Vision API containing large images fail when GZipped.
       annotate.setDisableGZipContent(true);
+      BatchAnnotateImagesResponse batchResponse = annotate.execute();
+      assert batchResponse.getResponses().size() == paths.size();
 
-      BatchAnnotateImagesResponse response = annotate.execute();
-      List<EntityAnnotation> textAnnotations = ImmutableList.of();
-
-      if (response.getResponses().size() != 0
-          && response.getResponses().get(0).getTextAnnotations() != null) {
-        textAnnotations = response.getResponses().get(0).getTextAnnotations();
+      ImmutableList.Builder<ImageText> output = ImmutableList.builder();
+      for (int i = 0; i < paths.size(); i++) {
+        Path path = paths.get(i);
+        AnnotateImageResponse response = batchResponse.getResponses().get(i);
+        output.add(
+            ImageText.builder()
+                .path(path)
+                .textAnnotations(
+                    MoreObjects.firstNonNull(
+                        response.getTextAnnotations(),
+                        ImmutableList.<EntityAnnotation>of()))
+                .error(response.getError())
+                .build());
       }
-      return ImageText.builder()
-          .path(path)
-          .textAnnotations(textAnnotations)
-          .build();
+      return output.build();
     } catch (IOException ex) {
-      return ImageText.builder()
-          .path(path)
-          .textAnnotations(ImmutableList.<EntityAnnotation>of())
-          .error(ex)
-          .build();
+      // Got an exception, which means the whole batch had an error.
+      ImmutableList.Builder<ImageText> output = ImmutableList.builder();
+      for (Path path : paths) {
+        output.add(
+            ImageText.builder()
+                .path(path)
+                .textAnnotations(ImmutableList.<EntityAnnotation>of())
+                .error(new Status().setMessage(ex.getMessage()))
+                .build());
+      }
+      return output.build();
     }
   }
 
@@ -199,7 +225,7 @@ public class TextApp {
    */
   public boolean successfullyDetectedText(ImageText image) {
     if (image.error() != null) {
-      System.out.printf("Error reading %s:\n%s\n", image.path(), image.error());
+      System.out.printf("Error reading %s:\n%s\n", image.path(), image.error().getMessage());
       return false;
     }
     return true;
