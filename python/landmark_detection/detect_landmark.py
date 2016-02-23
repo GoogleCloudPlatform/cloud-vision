@@ -17,6 +17,8 @@
 """Identifies the landmark for the given image."""
 
 import argparse
+import json
+import sys
 
 from googleapiclient import discovery
 import httplib2
@@ -61,9 +63,12 @@ def identify_landmark(gcs_uri, max_results=4):
     request = service.images().annotate(body={
         'requests': batch_request,
         })
-    response = request.execute()
+    response = request.execute()['responses'][0]
 
-    return response['responses'][0].get('landmarkAnnotations', None)
+    if 'error' in response:
+        raise Exception(json.dumps(response))
+
+    return response.get('landmarkAnnotations', None)
 # [END identify_landmark]
 
 
@@ -74,8 +79,7 @@ def main(gcs_uri):
     annotations = identify_landmark(gcs_uri)
     if not annotations:
         print('No landmark identified')
-    else:
-        print('\n'.join(a['description'] for a in annotations))
+    print('\n'.join(a['description'] for a in annotations))
 # [END main]
 
 
@@ -83,8 +87,11 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='Identifies the landmark in the given image.')
     parser.add_argument(
-        'gcs_uri', help=('The Google Cloud Storage uri to the image to identify'
-                         ', of the form: gs://bucket_name/object_name.jpg'))
+        'gcs_uri',
+        # Make sure we handle unicode correctly
+        type=lambda s: unicode(s, sys.getfilesystemencoding()),
+        help=('The Google Cloud Storage uri to the image to identify'
+              ', of the form: gs://bucket_name/object_name.jpg'))
     args = parser.parse_args()
 
     main(args.gcs_uri)
