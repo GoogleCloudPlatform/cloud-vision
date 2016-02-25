@@ -37,12 +37,18 @@ env:
   global:
   - GOOGLE_APPLICATION_CREDENTIALS=${TRAVIS_BUILD_DIR}/client-secret.json
   matrix:
+  - CONFIG=android_jdk8
+  - CONFIG=android_oracle8
   - CONFIG=java_jdk8
   - CONFIG=java_oracle8
 matrix:
   exclude:
   # It's nontrivial to programmatically install a new JDK from the command
   # line on OS X, so we rely on testing on Linux for Java code.
+  - os: osx
+    env: CONFIG=android_jdk8
+  - os: osx
+    env: CONFIG=android_oracle8
   - os: osx
     env: CONFIG=java_jdk8
   - os: osx
@@ -54,5 +60,8 @@ matrix:
     env: CONFIG=objectivec_ios
   - os: osx
     env: CONFIG=swift_ios
+branches:
+  only:
+  - master
 notifications:
   email: false
