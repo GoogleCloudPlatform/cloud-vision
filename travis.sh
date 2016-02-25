@@ -25,7 +25,7 @@ use_java() {
   version=$1
   case "$version" in
     jdk8)
-      sudo apt-get -qq update
+      sudo apt-get -qq update || true
       sudo apt-get -qqy install openjdk-8-jdk
       export PATH=/usr/lib/jvm/java-8-openjdk-amd64/bin:$PATH
       ;;
@@ -34,7 +34,7 @@ use_java() {
       echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | \
           sudo debconf-set-selections
       sudo apt-add-repository -y ppa:webupd8team/java
-      sudo apt-get -qqy update
+      sudo apt-get -qqy update || true
       sudo apt-get -qqy install oracle-java8-installer
       export PATH=/usr/lib/jvm/java-8-oracle/bin:$PATH
       ;;
@@ -73,7 +73,7 @@ build_android() {
   # http://www.tothenew.com/blog/gradle-installation-in-ubuntu/
   sudo apt-get -qqy install python-software-properties # for apt-add-repository
   sudo add-apt-repository -y ppa:cwchien/gradle
-  sudo apt-get -qqy update
+  sudo apt-get -qqy update || true
   sudo apt-get -qqy install gradle-2.11
   gradle -v
   # Set up the Android SDK.
@@ -83,7 +83,7 @@ build_android() {
   # Need 32-bit versions of the libraries.
   # http://stackoverflow.com/a/19524010/101923
   sudo dpkg --add-architecture i386
-  sudo apt-get -qqy update
+  sudo apt-get -qqy update || true
   # adb
   sudo apt-get -qqy install libc6:i386 libstdc++6:i386
   # aapt
