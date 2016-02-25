@@ -54,11 +54,11 @@ def main(photo_file):
         service_request = service.images().annotate(body={
             'requests': [{
                 'image': {
-                    'content': image_content
+                    'content': image_content.decode('UTF-8')
                 },
                 'features': [{
                     'type': 'LABEL_DETECTION',
-                    'maxResults': 1,
+                    'maxResults': 1
                 }]
             }]
         })
