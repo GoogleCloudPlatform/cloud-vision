@@ -77,6 +77,9 @@
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     [request setHTTPMethod: @"POST"];
     [request addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [request
+     addValue:[[NSBundle mainBundle] bundleIdentifier]
+     forHTTPHeaderField:@"X-Ios-Bundle-Identifier"];
     
     // Build our API request
     NSDictionary *paramsDictionary =

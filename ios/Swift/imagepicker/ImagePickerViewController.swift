@@ -24,7 +24,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var faceResults: UITextView!
     
     var API_KEY = "YOUR_API_KEY"
-    
 
     @IBAction func loadImageButtonTapped(sender: UIButton) {
         imagePicker.allowsEditing = false
@@ -73,9 +72,13 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     func createRequest(imageData: String) {
         // Create our request URL
-        let request = NSMutableURLRequest(URL: NSURL(string: "https://vision.googleapis.com/v1/images:annotate?key=\(API_KEY)")!)
+        let request = NSMutableURLRequest(
+            URL: NSURL(string: "https://vision.googleapis.com/v1/images:annotate?key=\(API_KEY)")!)
         request.HTTPMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue(
+            NSBundle.mainBundle().bundleIdentifier ?? "",
+            forHTTPHeaderField: "X-Ios-Bundle-Identifier")
         
         // Build our API request
         let jsonRequest: [String: AnyObject] = [
