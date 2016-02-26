@@ -16,7 +16,7 @@
 
 include_once("creds.php"); // Get $api_key
 $cvurl = "https://vision.googleapis.com/v1/images:annotate?key=" . $api_key;
-$type = "LABEL_DETECTION";
+$type = "LANDMARK_DETECTION";
 
 //Did they upload a file...
 if($_FILES['photo']['name'])
