@@ -15,7 +15,7 @@
 <?php
 
 include_once 'creds.php'; // Get $api_key
-$cvurl = 'https://vision.googleapis.com/v1/images:annotate?key='.$api_key;
+$cvurl = 'https://vision.googleapis.com/v1/images:annotate?key=' . $api_key;
 $type = 'LANDMARK_DETECTION';
 
 //Did they upload a file...
@@ -40,11 +40,11 @@ if ($_FILES['photo']['name']) {
 			  	"requests": [
 					{
 					  "image": {
-					    "content":"'.$base64.'"
+					    "content":"' . $base64 . '"
 					  },
 					  "features": [
 					      {
-					      	"type": "'.$type.'",
+					      	"type": "' . $type . '",
 							"maxResults": 200
 					      }
 					  ]
@@ -63,7 +63,7 @@ if ($_FILES['photo']['name']) {
             curl_close($curl);
 
             if ($status != 200) {
-                die("Error: call to URL $cvurl failed with status $status, response $json_response, curl_error ".curl_error($curl).', curl_errno '.curl_errno($curl));
+                die("Error: call to URL $cvurl failed with status $status, response $json_response, curl_error " . curl_error($curl) . ', curl_errno ' . curl_errno($curl));
             }
 
             echo '<pre>';
@@ -75,7 +75,7 @@ if ($_FILES['photo']['name']) {
     else {
         //set that to be the returned message
         echo 'Error';
-        die('Ooops!  Your upload triggered the following error:  '.$_FILES['photo']['error']);
+        die('Ooops!  Your upload triggered the following error:  ' . $_FILES['photo']['error']);
     }
 }
 ?>
