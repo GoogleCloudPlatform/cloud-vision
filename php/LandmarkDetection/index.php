@@ -13,10 +13,10 @@
  limitations under the License.
 -->
 <?php
-include_once("creds.php"); // Get $bucket
+include_once 'creds.php'; // Get $bucket
 use google\appengine\api\cloud_storage\CloudStorageTools;
 
-$options = [ 'gs_bucket_name' => $bucket ];
+$options = ['gs_bucket_name' => $bucket];
 $upload_url = CloudStorageTools::createUploadUrl('/process.php', $options);
 
 ?>

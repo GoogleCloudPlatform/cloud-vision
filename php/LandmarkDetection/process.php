@@ -14,39 +14,37 @@
 -->
 <?php
 
-include_once("creds.php"); // Get $api_key
-$cvurl = "https://vision.googleapis.com/v1/images:annotate?key=" . $api_key;
-$type = "LANDMARK_DETECTION";
+include_once 'creds.php'; // Get $api_key
+$cvurl = 'https://vision.googleapis.com/v1/images:annotate?key='.$api_key;
+$type = 'LANDMARK_DETECTION';
 
 //Did they upload a file...
-if($_FILES['photo']['name'])
-{
-	//if no errors...
-	if(!$_FILES['photo']['error'])
-	{
-		$valid_file = true;
-		if($_FILES['photo']['size'] > (4024000)) //can't be larger than ~4 MB
-		{
-			$valid_file = false;
-			die('Your file\'s size is too large.');
-		}
+if ($_FILES['photo']['name']) {
+    //if no errors...
+    if (!$_FILES['photo']['error']) {
+        $valid_file = true;
+        if ($_FILES['photo']['size'] > (4024000)) {
+            //can't be larger than ~4 MB
 
-		//if the file has passed the test
-		if($valid_file)
-		{
-			//convert it to base64
-			$data = file_get_contents($_FILES['photo']['tmp_name']);
-			$base64 = base64_encode($data);
-			//Create this JSON
-			$request_json ='{
+            $valid_file = false;
+            die('Your file\'s size is too large.');
+        }
+
+        //if the file has passed the test
+        if ($valid_file) {
+            //convert it to base64
+            $data = file_get_contents($_FILES['photo']['tmp_name']);
+            $base64 = base64_encode($data);
+            //Create this JSON
+            $request_json = '{
 			  	"requests": [
 					{
 					  "image": {
-					    "content":"' . $base64. '"
+					    "content":"'.$base64.'"
 					  },
 					  "features": [
 					      {
-					      	"type": "' .$type. '",
+					      	"type": "'.$type.'",
 							"maxResults": 200
 					      }
 					  ]
@@ -54,31 +52,30 @@ if($_FILES['photo']['name'])
 				]
 			}';
 
-			$curl = curl_init();
-			curl_setopt($curl, CURLOPT_URL, $cvurl);
-			curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-			curl_setopt($curl, CURLOPT_HTTPHEADER,array("Content-type: application/json"));
-			curl_setopt($curl, CURLOPT_POST, true);
-			curl_setopt($curl, CURLOPT_POSTFIELDS, $request_json);
-			$json_response = curl_exec($curl);
-			$status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-			curl_close($curl);
+            $curl = curl_init();
+            curl_setopt($curl, CURLOPT_URL, $cvurl);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-type: application/json'));
+            curl_setopt($curl, CURLOPT_POST, true);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $request_json);
+            $json_response = curl_exec($curl);
+            $status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+            curl_close($curl);
 
-			if ( $status != 200 ) {
-			    die("Error: call to URL $cvurl failed with status $status, response $json_response, curl_error " . curl_error($curl) . ", curl_errno " . curl_errno($curl));
-			}
+            if ($status != 200) {
+                die("Error: call to URL $cvurl failed with status $status, response $json_response, curl_error ".curl_error($curl).', curl_errno '.curl_errno($curl));
+            }
 
-			echo "<pre>";
-			echo $json_response;
-			echo "</pre>";
-		}
-	}
-	//if there is an error...
-	else
-	{
-		//set that to be the returned message
-		echo "Error";
-		 die('Ooops!  Your upload triggered the following error:  '.$_FILES['photo']['error']);
-	}
+            echo '<pre>';
+            echo $json_response;
+            echo '</pre>';
+        }
+    }
+    //if there is an error...
+    else {
+        //set that to be the returned message
+        echo 'Error';
+        die('Ooops!  Your upload triggered the following error:  '.$_FILES['photo']['error']);
+    }
 }
 ?>
