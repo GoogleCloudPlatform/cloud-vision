@@ -17,60 +17,23 @@
 package com.google.cloud.vision.samples.facedetect;
 
 import static com.google.common.truth.Truth.assertThat;
-import static org.junit.Assert.fail;
 
-import com.google.api.client.googleapis.json.GoogleJsonResponseException;
-import com.google.api.services.vision.v1.model.FaceAnnotation;
 import com.google.api.services.vision.v1.model.BoundingPoly;
+import com.google.api.services.vision.v1.model.FaceAnnotation;
 import com.google.api.services.vision.v1.model.Vertex;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.nio.file.Paths;
-import java.util.List;
 
-import javax.servlet.http.HttpServletResponse;
-
-/** Unit tests for {@link FaceDetectApp}. */
+/**
+ * Unit tests for {@link FaceDetectApp}.
+ */
 @RunWith(JUnit4.class)
 public class FaceDetectAppTest {
-  private static final int MAX_RESULTS = 3;
-
-  @Test public void detectFaces_withFace_returnsAtLeastOneFace() throws Exception {
-    // Arrange
-    FaceDetectApp appUnderTest = new FaceDetectApp(FaceDetectApp.getVisionService());
-
-    // Act
-    List<FaceAnnotation> faces =
-        appUnderTest.detectFaces(Paths.get("../../data/face_detection/face.jpg"), MAX_RESULTS);
-
-    // Assert
-    assertThat(faces).named("face.jpg faces").isNotEmpty();
-    assertThat(faces.get(0).getFdBoundingPoly().getVertices())
-        .named("face.jpg face #0 FdBoundingPoly Vertices")
-        .isNotEmpty();
-  }
-
-  @Test public void detectFaces_badImage_throwsException() throws Exception {
-    FaceDetectApp appUnderTest = new FaceDetectApp(FaceDetectApp.getVisionService());
-
-    try {
-      appUnderTest.detectFaces(Paths.get("../../data/bad.txt"), MAX_RESULTS);
-      fail("Expected IOException");
-    } catch (IOException expected) {
-      assertThat(expected.getMessage().toLowerCase())
-          .named("IOException message")
-          .contains("malformed request");
-    }
-  }
-
   @Test public void annotateWithFaces_manyFaces_outlinesFaces() throws Exception {
     // Arrange
     ImmutableList<FaceAnnotation> faces =

@@ -30,6 +30,8 @@
         </module>
 
     <module name="TreeWalker">
+        <!-- Make @SuppressWarnings available to checkstyle http://stackoverflow.com/a/22556386/101923 -->
+        <module name="SuppressWarningsHolder" />
         <module name="UnusedImports"/>
         <module name="OuterTypeFilename"/>
         <module name="IllegalTokenText">
@@ -179,6 +181,7 @@
         </module>
         <module name="JavadocMethod">
             <property name="scope" value="public"/>
+            <property name="allowMissingJavadoc" value="true"/>
             <property name="allowMissingParamTags" value="true"/>
             <property name="allowMissingThrowsTags" value="true"/>
             <property name="allowMissingReturnTag" value="true"/>
@@ -198,4 +201,7 @@
             <property name="exceptionVariableName" value="expected"/>
         </module>
     </module>
+
+    <!-- Allow silencing rules with annotations http://stackoverflow.com/a/22556386/101923 -->
+    <module name="SuppressWarningsFilter" />
 </module>
