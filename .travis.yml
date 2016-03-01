@@ -41,6 +41,7 @@ env:
   - CONFIG=android_oracle8
   - CONFIG=java_jdk8
   - CONFIG=java_oracle8
+  - CONFIG=php
 matrix:
   exclude:
   # It's nontrivial to programmatically install a new JDK from the command

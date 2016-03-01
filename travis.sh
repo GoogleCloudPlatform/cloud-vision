@@ -197,6 +197,17 @@ build_swift_ios() {
   # done
 }
 
+build_php() {
+  if [ $(uname -s) == "Linux" ]; then
+    sudo apt-get update -qq
+    sudo apt-get install -yqq php5
+  fi
+  wget http://get.sensiolabs.org/php-cs-fixer.phar -O php-cs-fixer.phar
+  php php-cs-fixer.phar fix --dry-run --diff --level=psr2 \
+      --fixers=concat_with_spaces,unused_use,trailing_spaces,indentation ./php
+  # TODO: run composer install & phpunit
+}
+
 # -------- main --------
 
 if [ "$#" -ne 1 ]; then
@@ -206,6 +217,7 @@ Usage: $0 { android_jdk8 |
             java_jdk8 |
             java_oracle8 |
             objectivec_ios |
+            php |
             swift_ios }
 "
   exit 1
