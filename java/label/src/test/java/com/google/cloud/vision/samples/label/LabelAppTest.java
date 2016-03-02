@@ -17,60 +17,23 @@
 package com.google.cloud.vision.samples.label;
 
 import static com.google.common.truth.Truth.assertThat;
-import static org.junit.Assert.fail;
 
-import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.services.vision.v1.model.EntityAnnotation;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Paths;
-import java.util.List;
 
-import javax.servlet.http.HttpServletResponse;
-
-/** Unit tests for {@link LabelApp}. */
+/**
+ * Unit tests for {@link LabelApp}.
+ */
 @RunWith(JUnit4.class)
 public class LabelAppTest {
-  private static final int MAX_LABELS = 3;
-
-  @Test public void labelImage_cat_returnsCatDescription() throws Exception {
-    // Arrange
-    LabelApp appUnderTest = new LabelApp(LabelApp.getVisionService());
-
-    // Act
-    List<EntityAnnotation> labels =
-        appUnderTest.labelImage(Paths.get("../../data/label/cat.jpg"), MAX_LABELS);
-
-    // Assert
-    ImmutableSet.Builder<String> builder = ImmutableSet.builder();
-    for (EntityAnnotation label : labels) {
-      builder.add(label.getDescription());
-    }
-    ImmutableSet<String> descriptions = builder.build();
-
-    assertThat(descriptions).named("cat.jpg labels").contains("cat");
-  }
-
-  @Test public void labelImage_badImage_throwsException() throws Exception {
-    LabelApp appUnderTest = new LabelApp(LabelApp.getVisionService());
-
-    try {
-      appUnderTest.labelImage(Paths.get("../../data/bad.txt"), MAX_LABELS);
-      fail("Expected IOException");
-    } catch (IOException expected) {
-      assertThat(expected.getMessage().toLowerCase())
-          .named("IOException message")
-          .contains("malformed request");
-    }
-  }
 
   @Test public void printLabels_emptyList_printsNoLabelsFound() throws Exception {
     // Arrange

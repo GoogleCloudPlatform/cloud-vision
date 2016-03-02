@@ -30,7 +30,7 @@ os:
 - linux
 before_install:
 - openssl aes-256-cbc -K $encrypted_49d9325ac449_key -iv $encrypted_49d9325ac449_iv
-  -in client-secret.json.enc -out client-secret.json -d
+  -in client-secret.json.enc -out client-secret.json -d || true
 script:
 - ./travis.sh $CONFIG
 env:

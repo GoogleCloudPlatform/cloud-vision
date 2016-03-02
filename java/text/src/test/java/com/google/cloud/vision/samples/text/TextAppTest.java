@@ -17,59 +17,65 @@
 package com.google.cloud.vision.samples.text;
 
 import static com.google.common.truth.Truth.assertThat;
-import static org.junit.Assert.fail;
 
-import com.google.api.client.googleapis.json.GoogleJsonResponseException;
-import com.google.api.services.vision.v1.model.FaceAnnotation;
-import com.google.api.services.vision.v1.model.BoundingPoly;
-import com.google.api.services.vision.v1.model.Vertex;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.LowLevelHttpRequest;
+import com.google.api.client.http.LowLevelHttpResponse;
+import com.google.api.client.json.Json;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.testing.http.MockHttpTransport;
+import com.google.api.client.testing.http.MockLowLevelHttpRequest;
+import com.google.api.client.testing.http.MockLowLevelHttpResponse;
+import com.google.api.services.vision.v1.Vision;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-import javax.servlet.http.HttpServletResponse;
-
-/** Unit tests for {@link TextApp}. */
+/**
+ * Unit tests for {@link TextApp}.
+ */
 @RunWith(JUnit4.class)
 public class TextAppTest {
-  @Test public void detectText_withImage_returnsPath() throws Exception {
-    // Arrange
-    TextApp appUnderTest = new TextApp(TextApp.getVisionService(), null /* index */);
+  private TextApp appUnderTest;
 
-    // Act
+  @Before public void setUp() throws Exception {
+    // Mock out the vision service for unit tests.
+    JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
+    HttpTransport transport = new MockHttpTransport() {
+      @Override
+      public LowLevelHttpRequest buildRequest(String method, String url) throws IOException {
+        return new MockLowLevelHttpRequest() {
+          @Override
+          public LowLevelHttpResponse execute() throws IOException {
+            MockLowLevelHttpResponse response = new MockLowLevelHttpResponse();
+            response.setStatusCode(200);
+            response.setContentType(Json.MEDIA_TYPE);
+            response.setContent("{\"responses\": [{\"textAnnotations\": []}]}");
+            return response;
+          }
+        };
+      }
+    };
+    Vision vision = new Vision(transport, jsonFactory, null);
+
+    appUnderTest = new TextApp(vision, null /* index */);
+  }
+
+  @Test public void detectText_withImage_returnsPath() throws Exception {
     List<ImageText> image =
         appUnderTest.detectText(ImmutableList.<Path>of(Paths.get("../../data/text/wakeupcat.jpg")));
 
-    // Assert
     assertThat(image.get(0).path().toString())
         .named("wakeupcat.jpg path")
         .isEqualTo("../../data/text/wakeupcat.jpg");
-  }
-
-  @Test public void extractDescriptions_withImage_returnsText() throws Exception {
-    // Arrange
-    TextApp appUnderTest = new TextApp(TextApp.getVisionService(), null /* index */);
-    List<ImageText> image =
-        appUnderTest.detectText(ImmutableList.<Path>of(Paths.get("../../data/text/wakeupcat.jpg")));
-
-    // Act
-    Word word = appUnderTest.extractDescriptions(image.get(0));
-
-    // Assert
-    assertThat(word.path().toString())
-        .named("wakeupcat.jpg path")
-        .isEqualTo("../../data/text/wakeupcat.jpg");
-    assertThat(word.word().toLowerCase()).named("wakeupcat.jpg word").contains("wake");
-    assertThat(word.word().toLowerCase()).named("wakeupcat.jpg word").contains("up");
-    assertThat(word.word().toLowerCase()).named("wakeupcat.jpg word").contains("human");
   }
 }

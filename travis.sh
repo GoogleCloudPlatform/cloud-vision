@@ -48,11 +48,11 @@ build_java() {
   for jdir in $(ls -d java/*/); do
     (
     cd "${jdir}" && mvn clean compile assembly:single
-    if [ -z "${GOOGLE_APPLICATION_CREDENTIALS}" ]; then
-      echo "Secrets not available, skipping tests."
-      mvn clean verify -DskipTests
-    else
+    if [ -f "${GOOGLE_APPLICATION_CREDENTIALS}" ]; then
       mvn clean verify
+    else
+      echo "Application Credentials not available, skipping integration tests."
+      mvn clean verify -DskipITs
     fi
     )
   done
