@@ -122,6 +122,42 @@ build_android_oracle8() {
   build_android
 }
 
+build_go() {
+  # Install
+  if [ $(uname -s) == "Linux" ]; then
+    sudo apt-get -qqy install golang
+  else
+    mkdir -p "${HOME}/bin"
+    (
+    cd "${HOME}/bin"
+    wget https://storage.googleapis.com/golang/go1.6.darwin-amd64.tar.gz
+    tar -xzf go1.6.darwin-amd64.tar.gz
+    export GOROOT="${HOME}/bin/go"
+    export PATH="${GOROOT}/bin:${PATH}"
+    )
+  fi
+  which go
+  go version
+
+  # Configure
+  export GOPATH="${HOME}/gocode"
+  export GOBIN="${GOPATH}/bin"
+  export PATH="${PATH}:${GOBIN}"
+  mkdir -p "${GOBIN}"
+  go get -u github.com/golang/lint/golint
+
+  # Run build & tests
+  go get -t -v ./go/...
+  go vet ./go/...
+  if [ -f "${GOOGLE_APPLICATION_CREDENTIALS}" ]; then
+    go test -v ./go/...
+  else
+    echo "Application Credentials not available, skipping integration tests."
+    go test -v -short ./go/...
+  fi
+  GOFMT=$(gofmt -d -s .) && echo $GOFMT && test -z "$GOFMT"
+}
+
 internal_ios_common () {
   # Make sure xctool is up to date. Adapted from
   #  http://docs.travis-ci.com/user/osx-ci-environment/
