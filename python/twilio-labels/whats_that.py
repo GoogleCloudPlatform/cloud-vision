@@ -25,7 +25,6 @@ from oauth2client.client import GoogleCredentials
 
 # App reqs
 import requests
-import re
 from random import randint
 
 DISCOVERY_URL = 'https://{api}.googleapis.com/$discovery/rest?version={apiVersion}'
