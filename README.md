@@ -25,6 +25,7 @@ See the [face detection](https://cloud.google.com/vision/docs/face-tutorial) tut
 
 - [Python Code](python/face_detection)
 - [Java Code](java/face_detection/)
+- [Node Code](node/face_detection)
 
 ### Label Detection
 
@@ -81,4 +82,3 @@ instructions.
 - [Documentation (Swift)](ios/Swift/README.md)
 
 - [iOS Sample Code](ios)
-
