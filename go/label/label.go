@@ -28,13 +28,15 @@ import (
 
 	"golang.org/x/net/context"
 	"golang.org/x/oauth2/google"
-	vision "google.golang.org/api/vision/v1"
+	"google.golang.org/api/vision/v1"
 )
 
 // run submits a label request on a single image by given file.
 func run(file string) error {
+	ctx := context.Background()
+
 	// Authenticate to generate a vision service.
-	client, err := google.DefaultClient(context.Background(), vision.CloudPlatformScope)
+	client, err := google.DefaultClient(ctx, vision.CloudPlatformScope)
 	if err != nil {
 		return err
 	}
@@ -44,11 +46,7 @@ func run(file string) error {
 	}
 
 	// Read the image.
-	path, err := filepath.Abs(file)
-	if err != nil {
-		return err
-	}
-	b, err := ioutil.ReadFile(path)
+	b, err := ioutil.ReadFile(file)
 	if err != nil {
 		return err
 	}
@@ -71,16 +69,16 @@ func run(file string) error {
 	// Parse annotations from responses
 	if annotations := res.Responses[0].LabelAnnotations; len(annotations) > 0 {
 		label := annotations[0].Description
-		fmt.Printf("Found label: %s for %s\n", label, path)
+		fmt.Printf("Found label: %s for %s\n", label, file)
 		return nil
 	}
-	fmt.Printf("Not found label: %s\n", path)
+	fmt.Printf("Not found label: %s\n", file)
 	return nil
 }
 
 func main() {
 	flag.Usage = func() {
-		fmt.Fprintf(os.Stderr, "Usage: %s <path-to-image>\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "Usage: %s <path-to-image>\n", filepath.Base(os.Args[0]))
 	}
 	flag.Parse()
 
