@@ -18,8 +18,8 @@
 // https://github.com/GoogleCloudPlatform/gcloud-node/blob/master/docs/authentication.md
 
 var gcloud = require('gcloud')(),
-    vision = gcloud.vision(),
-    fs = require('fs'),
+    vision = gcloud.vision();
+var fs = require('fs'),
     Canvas = require('canvas'),
     Image = Canvas.Image;
 
