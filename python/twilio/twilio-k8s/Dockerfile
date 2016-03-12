@@ -1,4 +1,4 @@
-# Copyright 2015 Google Inc. All Rights Reserved.
+# Copyright 2016 Google Inc. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,4 +26,4 @@ RUN pip install -r /app/requirements.txt
 
 ADD src /app
 
-CMD ["psqworker", "main.q"]
+CMD gunicorn -w 4 -b :$PORT whats_that:app

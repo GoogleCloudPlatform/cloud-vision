@@ -1,0 +1,26 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: twilio-vision-webapp
+  labels:
+    app: twilio-vision
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: twilio-vision
+        role: frontend
+    spec:
+      containers:
+      - name: twilio-vision-webapp
+        image: gcr.io/google-samples/twilio-vision:v1
+        imagePullPolicy: Always
+        env:
+        - name: PORT
+          value: "5000"
+        - name: MESSAGE_BLURB
+          value: "Your message has been passed to the Google Cloud Vision API for processing.\nImages are not stored in Google Cloud Platform, and will periodically need to be deleted from Twilio."
+        ports:
+        - name: http-server
+          containerPort: 5000
