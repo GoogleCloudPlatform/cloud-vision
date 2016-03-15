@@ -21,20 +21,27 @@
 # Modeled after:
 # https://github.com/google/protobuf/blob/master/travis.sh
 
+add_ppa() {
+  ppa=$1
+  # Install the apt-add-repository command.
+  sudo apt-get -qqy install \
+      software-properties-common python-software-properties
+  sudo apt-add-repository -y "${ppa}"
+  sudo apt-get -qq update || true
+}
+
 use_java() {
   version=$1
   case "$version" in
     jdk8)
-      sudo apt-get -qq update || true
+      add_ppa 'ppa:openjdk-r/ppa'
       sudo apt-get -qqy install openjdk-8-jdk
       export PATH=/usr/lib/jvm/java-8-openjdk-amd64/bin:$PATH
       ;;
     oracle8)
-      sudo apt-get -qqy install python-software-properties # for apt-add-repository
       echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | \
           sudo debconf-set-selections
-      sudo apt-add-repository -y ppa:webupd8team/java
-      sudo apt-get -qqy update || true
+      add_ppa 'ppa:webupd8team/java'
       sudo apt-get -qqy install oracle-java8-installer
       export PATH=/usr/lib/jvm/java-8-oracle/bin:$PATH
       ;;
@@ -71,9 +78,7 @@ build_java_oracle8() {
 build_android() {
   # Set up Gradle, then update to latest version.
   # http://www.tothenew.com/blog/gradle-installation-in-ubuntu/
-  sudo apt-get -qqy install python-software-properties # for apt-add-repository
-  sudo add-apt-repository -y ppa:cwchien/gradle
-  sudo apt-get -qqy update || true
+  add_ppa 'ppa:cwchien/gradle'
   sudo apt-get -qqy install gradle-2.11
   gradle -v
   # Set up the Android SDK.
@@ -97,7 +102,7 @@ build_android() {
   sudo apt-get -qqy install expect
   expect -c '
   set timeout 600   ;
-  spawn android update sdk --filter platform-tools,tools,build-tools-23.0.2,android-23,extra-android-support,extra-android-m2repository,extra-google-m2repository --no-ui --force;
+  spawn android update sdk --no-ui --force --all --filter tools,platform-tools,build-tools-23.0.2,android-23,extra-android-support,extra-android-m2repository,extra-google-m2repository;
   expect {
     "Do you accept the license" { exp_send "y\r" ; exp_continue }
     eof
