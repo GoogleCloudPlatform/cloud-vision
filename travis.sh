@@ -52,17 +52,15 @@ use_java() {
 }
 
 build_java() {
-  for jdir in $(ls -d java/*/); do
-    (
-    cd "${jdir}" && mvn clean compile assembly:single
-    if [ -f "${GOOGLE_APPLICATION_CREDENTIALS}" ]; then
-      mvn clean verify
-    else
-      echo "Application Credentials not available, skipping integration tests."
-      mvn clean verify -DskipITs
-    fi
-    )
-  done
+  (
+  cd java
+  if [ -f "${GOOGLE_APPLICATION_CREDENTIALS}" ]; then
+    mvn clean verify
+  else
+    echo "Application Credentials not available, skipping integration tests."
+    mvn clean verify -DskipITs
+  fi
+  )
 }
 
 build_java_jdk8() {

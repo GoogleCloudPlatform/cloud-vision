@@ -19,7 +19,6 @@ package com.google.cloud.vision.samples.landmarkdetection;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.fail;
 
-import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.services.vision.v1.model.EntityAnnotation;
 
 import org.junit.Before;
@@ -29,7 +28,6 @@ import org.junit.runners.JUnit4;
 
 import java.io.IOException;
 import java.util.List;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * Integration (system) tests for {@link DetectLandmark}.
