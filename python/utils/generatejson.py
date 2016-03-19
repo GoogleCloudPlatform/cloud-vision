@@ -58,33 +58,37 @@ def main(input_file, output_filename):
     # Collect all requests into an array - one per line in the input file
     request_list = []
     for line in input_file:
-        # The first value of a line is the image. The rest are features.
-        image_filename, features = line.lstrip().split(' ', 1)
+        try:
+        #building in a bit more exception handling for poorly named files
+			# The first value of a line is the image. The rest are features.
+			image_filename, features = line.lstrip().split(' ', 1)
 
-        # First, get the image data
-        with open(image_filename, 'rb') as image_file:
-            content_json_obj = {
-                'content': base64.b64encode(image_file.read())
-            }
+			# First, get the image data
+			with open(image_filename, 'rb') as image_file:
+				content_json_obj = {
+					'content': base64.b64encode(image_file.read())
+				}
 
-        # Then parse out all the features we want to compute on this image
-        feature_json_obj = []
-        for word in features.split(' '):
-            feature, max_results = word.split(':', 1)
-            feature_json_obj.append({
-                'type': get_detection_type(feature),
-                'maxResults': int(max_results),
-            })
+			# Then parse out all the features we want to compute on this image
+			feature_json_obj = []
+			for word in features.split(' '):
+				feature, max_results = word.split(':', 1)
+				feature_json_obj.append({
+					'type': get_detection_type(feature),
+					'maxResults': int(max_results),
+				})
 
-        # Now add it to the request
-        request_list.append({
-            'features': feature_json_obj,
-            'image': content_json_obj,
-        })
+			# Now add it to the request
+			request_list.append({
+				'features': feature_json_obj,
+				'image': content_json_obj,
+			})
 
-    # Write the object to a file, as json
-    with open(output_filename, 'w') as output_file:
-        json.dump({'requests': request_list}, output_file)
+		# Write the object to a file, as json
+		with open(output_filename, 'w') as output_file:
+			json.dump({'requests': request_list}, output_file)
+		except ErrorType:
+			pass
 
 
 DETECTION_TYPES = [
