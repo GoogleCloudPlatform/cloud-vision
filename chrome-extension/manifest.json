@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "Cloud Vision",
   "description": "Adds a right-click menu item to images to detect text, labels and faces.",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "permissions": [
     "clipboardWrite",
     "contextMenus",
