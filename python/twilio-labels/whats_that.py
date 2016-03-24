@@ -106,7 +106,7 @@ def get_labels(image, num_retries=3, max_results=3):
                               discoveryServiceUrl=DISCOVERY_URL)
 
     # Prepare the image for the API
-    image_content = base64.b64encode(image)
+    image_content = base64.b64encode(image).decode('UTF-8')
 
     # Construct the request
     service_request = service.images().annotate(

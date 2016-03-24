@@ -85,7 +85,8 @@ class VisionApi:
         for filename in images:
             batch_request.append({
                 'image': {
-                    'content': base64.b64encode(images[filename])
+                    'content': base64.b64encode(
+                            images[filename]).decode('UTF-8')
                 },
                 'features': [{
                     'type': 'TEXT_DETECTION',
@@ -113,9 +114,9 @@ class VisionApi:
                 else:
                     text_response[filename] = []
             return text_response
-        except errors.HttpError, e:
+        except errors.HttpError as e:
             print("Http Error for %s: %s" % (filename, e))
-        except KeyError, e2:
+        except KeyError as e2:
             print("Key error: %s" % e2)
 # [END detect_text]
 
@@ -231,7 +232,7 @@ def extract_description(texts):
     for text in texts:
         try:
             document += text['description']
-        except KeyError, e:
+        except KeyError as e:
             print('KeyError: %s\n%s' % (e, text))
     return document
 
