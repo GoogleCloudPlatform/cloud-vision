@@ -51,7 +51,7 @@ def detect_face(face_file, max_results=4):
     image_content = face_file.read()
     batch_request = [{
         'image': {
-            'content': base64.b64encode(image_content)
+            'content': base64.b64encode(image_content).decode('UTF-8')
             },
         'features': [{
             'type': 'FACE_DETECTION',
