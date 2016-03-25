@@ -31,17 +31,9 @@ os:
 osx_image: xcode7.2
 dist: trusty
 
-# Disable the default submodule logic. We need to transform the SSH URLs to
-# public URLs since Travis does not have SSH keys to clone the repo.
-# https://gist.github.com/petrbel/c3bf7e0f59c22a52f534
-git:
-  submodules: false
 before_install:
 - openssl aes-256-cbc -K $encrypted_49d9325ac449_key -iv $encrypted_49d9325ac449_iv
   -in client-secret.json.enc -out client-secret.json -d || true
-- sed -e 's/git@github.com:/https:\/\/github.com\//' .gitmodules > .gitmodules-https
-- mv .gitmodules-https .gitmodules
-- git submodule update --init --recursive
 
 script:
 - ./travis.sh $CONFIG
