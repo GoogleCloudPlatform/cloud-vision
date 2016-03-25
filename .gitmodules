@@ -1,3 +1,0 @@
-[submodule "java/java-repo-tools"]
-	path = java/java-repo-tools
-	url = git@github.com:GoogleCloudPlatform/java-repo-tools.git
