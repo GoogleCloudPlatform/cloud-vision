@@ -14,46 +14,46 @@
 
 import json
 import os
-import StringIO
 import shutil
 import tempfile
 import unittest
+from io import StringIO
 
-from .generatejson import main
+from generatejson import main
 
 
 class TestGenerateJson(unittest.TestCase):
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
         self.image_name = os.path.join(
-            os.path.dirname(__file__), 'generatejson_test_fake.jpg')
+            os.path.dirname(__file__), u'generatejson_test_fake.jpg')
 
     def tearDown(self):
         shutil.rmtree(self.temp_dir)
 
     def test_no_features(self):
-        input_file = StringIO.StringIO(self.image_name)
+        input_file = StringIO(self.image_name)
         output_filename = os.path.join(self.temp_dir, 'empty_file.json')
         with self.assertRaises(ValueError):
             main(input_file, output_filename)
         self.assertFalse(os.path.exists(output_filename))
 
     def test_no_image(self):
-        input_file = StringIO.StringIO('doesnotexist.jpg 1:1')
+        input_file = StringIO(u'doesnotexist.jpg 1:1')
         output_filename = os.path.join(self.temp_dir, 'empty_file.json')
         with self.assertRaises(IOError):
             main(input_file, output_filename)
         self.assertFalse(os.path.exists(output_filename))
 
     def test_no_max(self):
-        input_file = StringIO.StringIO(self.image_name + ' 1')
+        input_file = StringIO(self.image_name + ' 1')
         output_filename = os.path.join(self.temp_dir, 'empty_file.json')
         with self.assertRaises(ValueError):
             main(input_file, output_filename)
         self.assertFalse(os.path.exists(output_filename))
 
     def test_one_detection(self):
-        input_file = StringIO.StringIO(self.image_name + ' 1:1')
+        input_file = StringIO(self.image_name + ' 1:1')
         output_filename = os.path.join(self.temp_dir, 'empty_file.json')
         main(input_file, output_filename)
         self.assertTrue(os.path.exists(output_filename))
@@ -70,7 +70,7 @@ class TestGenerateJson(unittest.TestCase):
             1, obj['requests'][0]['features'][0]['maxResults'])
 
     def test_multiple_detections(self):
-        input_file = StringIO.StringIO(self.image_name + ' 1:1 2:3')
+        input_file = StringIO(self.image_name + ' 1:1 2:3')
         output_filename = os.path.join(self.temp_dir, 'empty_file.json')
         main(input_file, output_filename)
         self.assertTrue(os.path.exists(output_filename))
@@ -91,7 +91,7 @@ class TestGenerateJson(unittest.TestCase):
             3, obj['requests'][0]['features'][1]['maxResults'])
 
     def test_multiple_lines(self):
-        input_file = StringIO.StringIO(
+        input_file = StringIO(
             '%s 1:2\n%s 2:1' % ((self.image_name,) * 2))
         output_filename = os.path.join(self.temp_dir, 'empty_file.json')
         main(input_file, output_filename)
@@ -106,7 +106,7 @@ class TestGenerateJson(unittest.TestCase):
             self.assertIn('content', obj['requests'][i]['image'])
 
     def test_bad_detection_type(self):
-        input_file = StringIO.StringIO(self.image_name + ' 125:1')
+        input_file = StringIO(self.image_name + ' 125:1')
         output_filename = os.path.join(self.temp_dir, 'empty_file.json')
         main(input_file, output_filename)
         self.assertTrue(os.path.exists(output_filename))

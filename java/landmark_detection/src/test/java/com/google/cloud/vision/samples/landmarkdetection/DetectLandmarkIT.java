@@ -19,35 +19,36 @@ package com.google.cloud.vision.samples.landmarkdetection;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.fail;
 
-import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.services.vision.v1.model.EntityAnnotation;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.io.IOException;
 import java.util.List;
-import javax.servlet.http.HttpServletResponse;
 
 /**
- * Unit tests for {@link DetectLandmark}.
+ * Integration (system) tests for {@link DetectLandmark}.
  **/
 @RunWith(JUnit4.class)
-public class DetectLandmarkTest {
+@SuppressWarnings("checkstyle:abbreviationaswordinname")
+public class DetectLandmarkIT {
   private static final int MAX_RESULTS = 3;
   private static final String LANDMARK_URI = "gs://cloud-samples-tests/vision/water.jpg";
   private static final String PRIVATE_LANDMARK_URI =
       "gs://cloud-samples-tests/vision/water-private.jpg";
 
-  @Test public void identifyLandmark_withLandmark_returnsKnownLandmark() throws Exception {
-    // Arrange
-    DetectLandmark appUnderTest = new DetectLandmark(DetectLandmark.getVisionService());
+  private DetectLandmark appUnderTest;
 
-    // Act
+  @Before public void setUp() throws Exception {
+    appUnderTest = new DetectLandmark(DetectLandmark.getVisionService());
+  }
+
+  @Test public void identifyLandmark_withLandmark_returnsKnownLandmark() throws Exception {
     List<EntityAnnotation> landmarks = appUnderTest.identifyLandmark(LANDMARK_URI, MAX_RESULTS);
 
-    // Assert
     assertThat(landmarks).named("water.jpg landmarks").isNotEmpty();
     assertThat(landmarks.get(0).getDescription())
         .named("water.jpg landmark #0 description")
@@ -55,8 +56,6 @@ public class DetectLandmarkTest {
   }
 
   @Test public void identifyLandmark_noImage_throwsNotFound() throws Exception {
-    DetectLandmark appUnderTest = new DetectLandmark(DetectLandmark.getVisionService());
-
     try {
       appUnderTest.identifyLandmark(LANDMARK_URI + "/nonexistent.jpg", MAX_RESULTS);
       fail("Expected IOException");
@@ -66,8 +65,6 @@ public class DetectLandmarkTest {
   }
 
   @Test public void identifyLandmark_noImage_throwsForbidden() throws Exception {
-    DetectLandmark appUnderTest = new DetectLandmark(DetectLandmark.getVisionService());
-
     try {
       appUnderTest.identifyLandmark(PRIVATE_LANDMARK_URI, MAX_RESULTS);
       fail("Expected IOException");
@@ -76,4 +73,3 @@ public class DetectLandmarkTest {
     }
   }
 }
-

@@ -12,11 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 sudo: required
-dist: trusty
-osx_image: xcode7.2
-# Work around segmentation fault in CocoaPods on default Ruby (2.0.0).
-# https://docs.travis-ci.com/user/common-build-problems/#CocoaPods-fails-with-a-segmentation-fault
-rvm: 2.2.3
+
 # Note: travis currently does not support listing more than one language so
 # this cheats and claims to only be ruby (to allow rvm variable).  If they add
 # multiple language support, this should probably get updated to install steps
@@ -25,12 +21,20 @@ rvm: 2.2.3
 # Modeled after:
 # https://github.com/google/protobuf/blob/master/.travis.yml
 language: ruby
+# Work around segmentation fault in CocoaPods on default Ruby (2.0.0).
+# https://docs.travis-ci.com/user/common-build-problems/#CocoaPods-fails-with-a-segmentation-fault
+rvm: 2.2.3
+
 os:
 - osx
 - linux
+osx_image: xcode7.2
+dist: trusty
+
 before_install:
 - openssl aes-256-cbc -K $encrypted_49d9325ac449_key -iv $encrypted_49d9325ac449_iv
-  -in client-secret.json.enc -out client-secret.json -d
+  -in client-secret.json.enc -out client-secret.json -d || true
+
 script:
 - ./travis.sh $CONFIG
 env:
@@ -39,8 +43,10 @@ env:
   matrix:
   - CONFIG=android_jdk8
   - CONFIG=android_oracle8
+  - CONFIG=go
   - CONFIG=java_jdk8
   - CONFIG=java_oracle8
+  - CONFIG=php
 matrix:
   exclude:
   # It's nontrivial to programmatically install a new JDK from the command
@@ -60,6 +66,7 @@ matrix:
     env: CONFIG=objectivec_ios
   - os: osx
     env: CONFIG=swift_ios
+
 branches:
   only:
   - master

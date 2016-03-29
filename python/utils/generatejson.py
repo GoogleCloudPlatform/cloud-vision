@@ -64,7 +64,7 @@ def main(input_file, output_filename):
         # First, get the image data
         with open(image_filename, 'rb') as image_file:
             content_json_obj = {
-                'content': base64.b64encode(image_file.read())
+                'content': base64.b64encode(image_file.read()).decode('UTF-8')
             }
 
         # Then parse out all the features we want to compute on this image
@@ -145,5 +145,5 @@ if __name__ == '__main__':
     try:
         with open(args.input_file, 'r') as input_file:
             main(input_file, args.output_file)
-    except ValueError, e:
+    except ValueError as e:
         sys.exit('Invalid input file format.\n' + FILE_FORMAT_DESCRIPTION)

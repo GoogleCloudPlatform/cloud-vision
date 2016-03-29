@@ -39,7 +39,7 @@ class VisionApi(object):
         for image in images:
             batch_request.append({
                 'image': {
-                    'content': base64.b64encode(image)
+                    'content': base64.b64encode(image).decode('UTF-8')
                 },
                 'features': [{
                     'type': 'LABEL_DETECTION',

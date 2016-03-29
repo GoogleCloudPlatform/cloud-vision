@@ -21,20 +21,27 @@
 # Modeled after:
 # https://github.com/google/protobuf/blob/master/travis.sh
 
+add_ppa() {
+  ppa=$1
+  # Install the apt-add-repository command.
+  sudo apt-get -qqy install \
+      software-properties-common python-software-properties
+  sudo apt-add-repository -y "${ppa}"
+  sudo apt-get -qq update || true
+}
+
 use_java() {
   version=$1
   case "$version" in
     jdk8)
-      sudo apt-get -qq update || true
+      add_ppa 'ppa:openjdk-r/ppa'
       sudo apt-get -qqy install openjdk-8-jdk
       export PATH=/usr/lib/jvm/java-8-openjdk-amd64/bin:$PATH
       ;;
     oracle8)
-      sudo apt-get -qqy install python-software-properties # for apt-add-repository
       echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | \
           sudo debconf-set-selections
-      sudo apt-add-repository -y ppa:webupd8team/java
-      sudo apt-get -qqy update || true
+      add_ppa 'ppa:webupd8team/java'
       sudo apt-get -qqy install oracle-java8-installer
       export PATH=/usr/lib/jvm/java-8-oracle/bin:$PATH
       ;;
@@ -45,17 +52,15 @@ use_java() {
 }
 
 build_java() {
-  for jdir in $(ls -d java/*/); do
-    (
-    cd "${jdir}" && mvn clean compile assembly:single
-    if [ -z "${GOOGLE_APPLICATION_CREDENTIALS}" ]; then
-      echo "Secrets not available, skipping tests."
-      mvn clean verify -DskipTests
-    else
-      mvn clean verify
-    fi
-    )
-  done
+  (
+  cd java
+  if [ -f "${GOOGLE_APPLICATION_CREDENTIALS}" ]; then
+    mvn clean verify
+  else
+    echo "Application Credentials not available, skipping integration tests."
+    mvn clean verify -DskipITs
+  fi
+  )
 }
 
 build_java_jdk8() {
@@ -71,9 +76,7 @@ build_java_oracle8() {
 build_android() {
   # Set up Gradle, then update to latest version.
   # http://www.tothenew.com/blog/gradle-installation-in-ubuntu/
-  sudo apt-get -qqy install python-software-properties # for apt-add-repository
-  sudo add-apt-repository -y ppa:cwchien/gradle
-  sudo apt-get -qqy update || true
+  add_ppa 'ppa:cwchien/gradle'
   sudo apt-get -qqy install gradle-2.11
   gradle -v
   # Set up the Android SDK.
@@ -97,7 +100,7 @@ build_android() {
   sudo apt-get -qqy install expect
   expect -c '
   set timeout 600   ;
-  spawn android update sdk --filter platform-tools,tools,build-tools-23.0.2,android-23,extra-android-support,extra-android-m2repository,extra-google-m2repository --no-ui --force;
+  spawn android update sdk --no-ui --force --all --filter tools,platform-tools,build-tools-23.0.2,android-23,extra-android-support,extra-android-m2repository,extra-google-m2repository;
   expect {
     "Do you accept the license" { exp_send "y\r" ; exp_continue }
     eof
@@ -120,6 +123,42 @@ build_android_jdk8() {
 build_android_oracle8() {
   use_java oracle8
   build_android
+}
+
+build_go() {
+  # Install
+  if [ $(uname -s) == "Linux" ]; then
+    sudo apt-get -qqy install golang
+  else
+    mkdir -p "${HOME}/bin"
+    (
+    cd "${HOME}/bin"
+    wget https://storage.googleapis.com/golang/go1.6.darwin-amd64.tar.gz
+    tar -xzf go1.6.darwin-amd64.tar.gz
+    export GOROOT="${HOME}/bin/go"
+    export PATH="${GOROOT}/bin:${PATH}"
+    )
+  fi
+  which go
+  go version
+
+  # Configure
+  export GOPATH="${HOME}/gocode"
+  export GOBIN="${GOPATH}/bin"
+  export PATH="${PATH}:${GOBIN}"
+  mkdir -p "${GOBIN}"
+  go get -u github.com/golang/lint/golint
+
+  # Run build & tests
+  go get -t -v ./go/...
+  go vet ./go/...
+  if [ -f "${GOOGLE_APPLICATION_CREDENTIALS}" ]; then
+    go test -v ./go/...
+  else
+    echo "Application Credentials not available, skipping integration tests."
+    go test -v -short ./go/...
+  fi
+  GOFMT=$(gofmt -d -s .) && echo $GOFMT && test -z "$GOFMT"
 }
 
 internal_ios_common () {
@@ -197,6 +236,17 @@ build_swift_ios() {
   # done
 }
 
+build_php() {
+  if [ $(uname -s) == "Linux" ]; then
+    sudo apt-get update -qq
+    sudo apt-get install -yqq php5
+  fi
+  wget http://get.sensiolabs.org/php-cs-fixer.phar -O php-cs-fixer.phar
+  php php-cs-fixer.phar fix --dry-run --diff --level=psr2 \
+      --fixers=concat_with_spaces,unused_use,trailing_spaces,indentation ./php
+  # TODO: run composer install & phpunit
+}
+
 # -------- main --------
 
 if [ "$#" -ne 1 ]; then
@@ -206,6 +256,7 @@ Usage: $0 { android_jdk8 |
             java_jdk8 |
             java_oracle8 |
             objectivec_ios |
+            php |
             swift_ios }
 "
   exit 1
