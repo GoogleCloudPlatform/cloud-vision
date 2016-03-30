@@ -24,7 +24,7 @@ function uploadFiles(event) {
   event.stopPropagation(); // Stop stuff happening
   event.preventDefault(); // Totally stop stuff happening
 
-  //Grab the file and asynchronously convert to base64.
+  // Grab the file and asynchronously convert to base64.
   var file = $('#fileInput')[0].files[0];
   var reader = new FileReader()
   reader.onloadend = processFile
@@ -42,17 +42,17 @@ function sendFiletoCloudVision(content) {
   // Strip out the file prefix when you convert to json.
   var json = '{' +
     ' "requests": [' +
-    '	{ ' +
-    '	  "image": {' +
-    '	    "content":"' + content.replace("data:image/jpeg;base64,", "") + '"' +
-    '	  },' +
-    '	  "features": [' +
-    '	      {' +
-    '	      	"type": "' + type + '",' +
-    '			"maxResults": 200' +
-    '	      }' +
-    '	  ]' +
-    '	}' +
+    ' { ' +
+    '   "image": {' +
+    '     "content":"' + content.replace("data:image/jpeg;base64,", "") + '"' +
+    '   },' +
+    '   "features": [' +
+    '       {' +
+    '         "type": "' + type + '",' +
+    '     "maxResults": 200' +
+    '       }' +
+    '   ]' +
+    ' }' +
     ']' +
     '}';
 
@@ -61,7 +61,7 @@ function sendFiletoCloudVision(content) {
     url: cvurl,
     dataType: 'json',
     data: json,
-    //Include headers, otherwise you get an odd 400 error.
+    // Include headers, otherwise you get an odd 400 error.
     headers: {
       "Content-Type": "application/json",
     },
