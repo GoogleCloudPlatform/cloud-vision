@@ -13,28 +13,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>Cloud Vision Demo</title>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
-	<script type="text/javascript" src="key.js"></script>
-	<script type="text/javascript" src="main.js"></script>
+  <meta charset="UTF-8">
+  <title>Cloud Vision Demo</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+  <script type="text/javascript" src="key.js"></script>
+  <script type="text/javascript" src="main.js"></script>
 </head>
 <body>
-	<form id="fileform" action="">
-		<select name="type" id="type">
-			<option value="LANDMARK_DETECTION">LANDMARK_DETECTION</option>
-			<option value="TYPE_UNSPECIFIED">TYPE_UNSPECIFIED</option>
-			<option value="FACE_DETECTION">FACE_DETECTION</option>
-			<option value="LOGO_DETECTION">LOGO_DETECTION</option>
-			<option value="LABEL_DETECTION">LABEL_DETECTION</option>
-			<option value="TEXT_DETECTION">TEXT_DETECTION</option>
-			<option value="SAFE_SEARCH_DETECTION">SAFE_SEARCH_DETECTION</option>
-			<option value="IMAGE_PROPERTIES">IMAGE_PROPERTIES</option>
-		</select><br />
-		<input id="fileInput" type="file" name="fileField"><br /><br />
-		<input type="submit" name="submit" value="Submit">
-	</form>
+  <form id="fileform" action="">
+    <select name="type">
+      <option value="LANDMARK_DETECTION">LANDMARK_DETECTION</option>
+      <option value="TYPE_UNSPECIFIED">TYPE_UNSPECIFIED</option>
+      <option value="FACE_DETECTION">FACE_DETECTION</option>
+      <option value="LOGO_DETECTION">LOGO_DETECTION</option>
+      <option value="LABEL_DETECTION">LABEL_DETECTION</option>
+      <option value="TEXT_DETECTION">TEXT_DETECTION</option>
+      <option value="SAFE_SEARCH_DETECTION">SAFE_SEARCH_DETECTION</option>
+      <option value="IMAGE_PROPERTIES">IMAGE_PROPERTIES</option>
+    </select><br />
+    <input type="file" name="fileField"><br /><br />
+    <input type="submit" name="submit" value="Submit">
+  </form>
 
-	<div id="results"></div>
+  <code style="white-space:pre" id="results"></code>
 </body>
 </html>
