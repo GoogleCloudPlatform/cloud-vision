@@ -93,9 +93,9 @@ def highlight_faces(image, faces, output_filename):
 
 
 # [START main]
-def main(input_filename, output_filename):
+def main(input_filename, output_filename, max_results):
     with open(input_filename, 'rb') as image:
-        faces = detect_face(image)
+        faces = detect_face(image, max_results)
         print('Found %s face%s' % (len(faces), '' if len(faces) == 1 else 's'))
 
         print('Writing to file %s' % output_filename)
@@ -113,6 +113,9 @@ if __name__ == '__main__':
     parser.add_argument(
         '--out', dest='output', default='out.jpg',
         help='the name of the output file.')
+    parser.add_argument(
+        '--max-results', dest='max_results', default=4,
+        help='the max results of face detection.')
     args = parser.parse_args()
 
-    main(args.input_image, args.output)
+    main(args.input_image, args.output, args.max_results)
