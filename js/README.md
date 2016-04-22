@@ -10,9 +10,10 @@ This directory contains [Cloud Vision API](https://cloud.google.com/vision/) Cli
 
 ## Setup
 1. Create a file named *key.js*
-2. Create the line `var apiKey = "[YOUR API KEY HERE]";`
+2. Create the line `var apiKey = "YOUR API KEY HERE";`
 3. Save file
 4. Browse to index.html, and run through demo
 
 
 From here, the demo allows you to upload images and process them using the various [Cloud Vision API annotation types](https://cloud.google.com/vision/reference/rest/v1/images/annotate#Type).
+
