@@ -44,8 +44,6 @@ env:
   - CONFIG=android_jdk8
   - CONFIG=android_oracle8
   - CONFIG=go
-  - CONFIG=java_jdk8
-  - CONFIG=java_oracle8
   - CONFIG=php
 matrix:
   exclude:
@@ -55,10 +53,6 @@ matrix:
     env: CONFIG=android_jdk8
   - os: osx
     env: CONFIG=android_oracle8
-  - os: osx
-    env: CONFIG=java_jdk8
-  - os: osx
-    env: CONFIG=java_oracle8
   # Add into the matrix OS X tests of iOS samples (needs Xcode, so it won't
   # work on other platforms). These are split so it doesn't take as long to run
   include:

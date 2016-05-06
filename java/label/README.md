@@ -1,3 +1,12 @@
+![status: inactive](https://img.shields.io/badge/status-inactive-red.svg)
+
+The Google Cloud Vision API Java samples have moved. This directory is no longer
+actively developed or maintained.
+
+For new work on this check out the
+[image labeling vision sample](https://github.com/GoogleCloudPlatform/java-docs-samples/tree/master/vision/label)
+in the Google Cloud Platform Java samples repository.
+
 # Google Cloud Vision API Java Image Labeling example
 
 ## Download Maven
