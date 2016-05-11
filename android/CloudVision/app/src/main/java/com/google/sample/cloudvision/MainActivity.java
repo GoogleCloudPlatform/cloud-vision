@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
     public void uploadImage(Uri uri) {
         if (uri != null) {
             try {
-                // scale the image to 800px to save on bandwidth
+                // scale the image to save on bandwidth
                 Bitmap bitmap =
                         scaleBitmapDown(
                                 MediaStore.Images.Media.getBitmap(getContentResolver(), uri),
