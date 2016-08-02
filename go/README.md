@@ -1,12 +1,8 @@
-# Cloud Vision API Go samples
+![status: inactive](https://img.shields.io/badge/status-inactive-red.svg)
 
-This directory contains [Cloud Vision API](https://cloud.google.com/vision/) Go samples and utilities.
+The Google Cloud Vision API Go samples have moved. This directory is no longer
+actively developed or maintained.
 
-## Samples
-
-### Label Detection
-
-See the [label detection](https://cloud.google.com/vision/docs/label-tutorial) tutorial in the docs.
-
-[Go Code](label)
-
+For new work on this check out the
+[vision samples](https://github.com/GoogleCloudPlatform/golang-samples/tree/master/vision)
+in the Google Cloud Platform Go samples repository.
