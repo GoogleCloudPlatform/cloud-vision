@@ -43,7 +43,6 @@ env:
   matrix:
   - CONFIG=android_jdk8
   - CONFIG=android_oracle8
-  - CONFIG=go
   - CONFIG=php
 matrix:
   exclude:
