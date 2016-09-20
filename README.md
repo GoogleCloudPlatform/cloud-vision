@@ -4,9 +4,6 @@
 This repo contains some [Google Cloud Vision
 API](https://cloud.google.com/vision/) examples.
 
-[![Build
-Status](https://travis-ci.org/GoogleCloudPlatform/cloud-vision.svg?branch=master)](https://travis-ci.org/GoogleCloudPlatform/cloud-vision)
-
 The samples are organized by language and mobile platform.
 
 ## Language Examples
