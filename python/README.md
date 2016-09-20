@@ -14,13 +14,13 @@ Some of the samples require additional setup, which their READMEs will specify.
 
 See the [face detection](https://cloud.google.com/vision/docs/face-tutorial) tutorial in the docs.
 
-[Python Code](face_detection)
+[Python Code](https://github.com/GoogleCloudPlatform/python-docs-samples/tree/master/vision/api/face_detection)
 
 ### Label Detection
 
 See the [label detection](https://cloud.google.com/vision/docs/label-tutorial) tutorial in the docs.
 
-[Python Code](label)
+[Python Code](https://github.com/GoogleCloudPlatform/python-docs-samples/tree/master/vision/api/label)
 
 ### Label Tagging Using Kubernetes
 
