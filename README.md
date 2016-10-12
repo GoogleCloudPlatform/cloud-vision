@@ -13,22 +13,22 @@ The samples are organized by language and mobile platform.
 This sample identifies a landmark within an image stored on
 Google Cloud Storage.
 
-- [Documentation and Java Code](java/landmark_detection/)
-- [Documentation and Python Code](python/landmark_detection/)
+- [Documentation and Java Code](https://github.com/GoogleCloudPlatform/java-docs-samples/tree/master/vision/landmark-detection)
+- [Documentation and Python Code](https://github.com/GoogleCloudPlatform/cloud-vision/tree/master/python/landmark_detection/)
 
 ### Face Detection
 
 See the [face detection](https://cloud.google.com/vision/docs/face-tutorial) tutorial in the docs.
 
-- [Python Code](python/face_detection)
-- [Java Code](java/face_detection/)
+- [Python Code](https://github.com/GoogleCloudPlatform/python-docs-samples/tree/master/vision/api/face_detection)
+- [Java Code](https://github.com/GoogleCloudPlatform/java-docs-samples/tree/master/vision/face-detection)
 
 ### Label Detection
 
 See the [label detection](https://cloud.google.com/vision/docs/label-tutorial) tutorial in the docs.
 
-- [Python Code](python/label)
-- [Java Code](java/label/)
+- [Python Code](https://github.com/GoogleCloudPlatform/python-docs-samples/tree/master/vision/api/label)
+- [Java Code](https://github.com/GoogleCloudPlatform/java-docs-samples/tree/master/vision/label)
 
 ### Label Tagging Using Kubernetes
 
@@ -38,7 +38,7 @@ Vision API to classify (label) images from Reddit's
 [/r/aww](https://reddit.com/r/aww) subreddit, and display the labelled results
 in a web application.
 
-- [Documentation and Python Code](python/awwvision)
+- [Documentation and Python Code](https://github.com/GoogleCloudPlatform/cloud-vision/tree/master/python/awwvision)
 
 ### Text Detection Using the Vision API
 
@@ -52,8 +52,8 @@ For finding stopwords and doing stemming, the Python example uses the
 [nltk](http://www.nltk.org/index.html) (Natural Language Toolkit) library.
 The Java example uses the [OpenNLP](https://opennlp.apache.org/) library.
 
-- [Documentation and Python Code](python/text)
-- [Documentation and Java Code](java/text)
+- [Documentation and Python Code](https://github.com/GoogleCloudPlatform/cloud-vision/tree/master/python/text)
+- [Documentation and Java Code](https://github.com/GoogleCloudPlatform/java-docs-samples/tree/master/vision/text)
 
 ## Mobile Platform Examples
 
@@ -62,7 +62,7 @@ The Java example uses the [OpenNLP](https://opennlp.apache.org/) library.
 This simple single-activity sample that shows you how to make a call to the
 Cloud Vision API with an image picked from your device’s gallery.
 
-- [Documentation and Android Code](android)
+- [Documentation and Android Code](https://github.com/GoogleCloudPlatform/cloud-vision/tree/master/android)
 
 ### Image Detection Using iOS Device Photos
 
@@ -73,9 +73,9 @@ labels and face metadata from the API response are displayed in the UI.
 Check out the Swift or Objective-C READMEs for specific getting started
 instructions.
 
-- [Documentation (Objective-C)](ios/Objective-C/README.md)
+- [Documentation (Objective-C)](https://github.com/GoogleCloudPlatform/cloud-vision/tree/master/ios/Objective-C/README.md)
 
-- [Documentation (Swift)](ios/Swift/README.md)
+- [Documentation (Swift)](https://github.com/GoogleCloudPlatform/cloud-vision/tree/master/ios/Swift/README.md)
 
-- [iOS Sample Code](ios)
+- [iOS Sample Code](https://github.com/GoogleCloudPlatform/cloud-vision/tree/master/ios)
 
