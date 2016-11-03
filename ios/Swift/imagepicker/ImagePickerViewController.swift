@@ -15,125 +15,62 @@
 import UIKit
 import SwiftyJSON
 
+
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    let imagePicker = UIImagePickerController()
+    let session = URLSession.shared
     
     @IBOutlet weak var imageView: UIImageView!
-    let imagePicker = UIImagePickerController()
     @IBOutlet weak var spinner: UIActivityIndicatorView!
     @IBOutlet weak var labelResults: UITextView!
     @IBOutlet weak var faceResults: UITextView!
     
-    var API_KEY = "YOUR_API_KEY"
-
-    @IBAction func loadImageButtonTapped(sender: UIButton) {
+    var googleAPIKey = "YOUR_API_KEY"
+    var googleURL: URL {
+        return URL(string: "https://vision.googleapis.com/v1/images:annotate?key=\(googleAPIKey)")!
+    }
+    
+    @IBAction func loadImageButtonTapped(_ sender: UIButton) {
         imagePicker.allowsEditing = false
-        imagePicker.sourceType = .PhotoLibrary
+        imagePicker.sourceType = .photoLibrary
         
-        presentViewController(imagePicker, animated: true, completion: nil)
+        present(imagePicker, animated: true, completion: nil)
     }
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
-        if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
-            imageView.contentMode = .ScaleAspectFit
-            imageView.hidden = true // You could optionally display the image here by setting imageView.image = pickedImage
-            spinner.startAnimating()
-            faceResults.hidden = true
-            labelResults.hidden = true
-            
-            // Base64 encode the image and create the request
-            let binaryImageData = base64EncodeImage(pickedImage)
-            createRequest(binaryImageData)
-        }
-        
-        dismissViewControllerAnimated(true, completion: nil)
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view, typically from a nib.
+        imagePicker.delegate = self
+        labelResults.isHidden = true
+        faceResults.isHidden = true
+        spinner.hidesWhenStopped = true
     }
-    
-    func resizeImage(imageSize: CGSize, image: UIImage) -> NSData {
-        UIGraphicsBeginImageContext(imageSize)
-        image.drawInRect(CGRectMake(0, 0, imageSize.width, imageSize.height))
-        let newImage = UIGraphicsGetImageFromCurrentImageContext()
-        let resizedImage = UIImagePNGRepresentation(newImage)
-        UIGraphicsEndImageContext()
-        return resizedImage!
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
     }
+}
+
+
+/// Image processing
+
+extension ViewController {
     
-    func base64EncodeImage(image: UIImage) -> String {
-        var imagedata = UIImagePNGRepresentation(image)
-        
-        // Resize the image if it exceeds the 2MB API limit
-        if (imagedata?.length > 2097152) {
-            let oldSize: CGSize = image.size
-            let newSize: CGSize = CGSizeMake(800, oldSize.height / oldSize.width * 800)
-            imagedata = resizeImage(newSize, image: image)
-        }
-        
-        return imagedata!.base64EncodedStringWithOptions(.EncodingEndLineWithCarriageReturn)
-    }
-    
-    func createRequest(imageData: String) {
-        // Create our request URL
-        let request = NSMutableURLRequest(
-            URL: NSURL(string: "https://vision.googleapis.com/v1/images:annotate?key=\(API_KEY)")!)
-        request.HTTPMethod = "POST"
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue(
-            NSBundle.mainBundle().bundleIdentifier ?? "",
-            forHTTPHeaderField: "X-Ios-Bundle-Identifier")
-        
-        // Build our API request
-        let jsonRequest: [String: AnyObject] = [
-            "requests": [
-                "image": [
-                    "content": imageData
-                ],
-                "features": [
-                    [
-                        "type": "LABEL_DETECTION",
-                        "maxResults": 10
-                    ],
-                    [
-                        "type": "FACE_DETECTION",
-                        "maxResults": 10
-                    ]
-                ]
-            ]
-        ]
-        
-        // Serialize the JSON
-        request.HTTPBody = try! NSJSONSerialization.dataWithJSONObject(jsonRequest, options: [])
-        
-        // Run the request on a background thread
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
-            self.runRequestOnBackgroundThread(request)
-        });
-    
-    }
-    
-    func runRequestOnBackgroundThread(request: NSMutableURLRequest) {
-        
-        let session = NSURLSession.sharedSession()
-        
-        // run the request
-        let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
-            self.analyzeResults(data!)
-        })
-        task.resume()
-    }
-    
-    func analyzeResults(dataToParse: NSData) {
+    func analyzeResults(_ dataToParse: Data) {
         
         // Update UI on the main thread
-        dispatch_async(dispatch_get_main_queue(), {
-
+        DispatchQueue.main.async(execute: {
+            
             
             // Use SwiftyJSON to parse results
             let json = JSON(data: dataToParse)
             let errorObj: JSON = json["error"]
-
+            
             self.spinner.stopAnimating()
-            self.imageView.hidden = true
-            self.labelResults.hidden = false
-            self.faceResults.hidden = false
+            self.imageView.isHidden = true
+            self.labelResults.isHidden = false
+            self.faceResults.isHidden = false
             self.faceResults.text = ""
             
             // Check for errors
@@ -203,24 +140,129 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
     }
     
-    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-        dismissViewControllerAnimated(true, completion: nil)
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            imageView.contentMode = .scaleAspectFit
+            imageView.isHidden = true // You could optionally display the image here by setting imageView.image = pickedImage
+            spinner.startAnimating()
+            faceResults.isHidden = true
+            labelResults.isHidden = true
+            
+            // Base64 encode the image and create the request
+            let binaryImageData = base64EncodeImage(pickedImage)
+            createRequest(with: binaryImageData)
+        }
+        
+        dismiss(animated: true, completion: nil)
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        imagePicker.delegate = self
-        labelResults.hidden = true
-        faceResults.hidden = true
-        spinner.hidesWhenStopped = true
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    func resizeImage(_ imageSize: CGSize, image: UIImage) -> Data {
+        UIGraphicsBeginImageContext(imageSize)
+        image.draw(in: CGRect(x: 0, y: 0, width: imageSize.width, height: imageSize.height))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        let resizedImage = UIImagePNGRepresentation(newImage!)
+        UIGraphicsEndImageContext()
+        return resizedImage!
     }
-
-
 }
 
+
+/// Networking
+
+extension ViewController {
+    func base64EncodeImage(_ image: UIImage) -> String {
+        var imagedata = UIImagePNGRepresentation(image)
+        
+        // Resize the image if it exceeds the 2MB API limit
+        if (imagedata?.count > 2097152) {
+            let oldSize: CGSize = image.size
+            let newSize: CGSize = CGSize(width: 800, height: oldSize.height / oldSize.width * 800)
+            imagedata = resizeImage(newSize, image: image)
+        }
+        
+        return imagedata!.base64EncodedString(options: .endLineWithCarriageReturn)
+    }
+    
+    func createRequest(with imageBase64: String) {
+        // Create our request URL
+        
+        var request = URLRequest(url: googleURL)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue(Bundle.main.bundleIdentifier ?? "", forHTTPHeaderField: "X-Ios-Bundle-Identifier")
+        
+        // Build our API request
+        let jsonRequest = [
+            "requests": [
+                "image": [
+                    "content": imageBase64
+                ],
+                "features": [
+                    [
+                        "type": "LABEL_DETECTION",
+                        "maxResults": 10
+                    ],
+                    [
+                        "type": "FACE_DETECTION",
+                        "maxResults": 10
+                    ]
+                ]
+            ]
+        ]
+        let jsonObject = JSON(jsonDictionary: jsonRequest)
+        
+        // Serialize the JSON
+        guard let data = try? jsonObject.rawData() else {
+            return
+        }
+        
+        request.httpBody = data
+        
+        // Run the request on a background thread
+        DispatchQueue.global().async { self.runRequestOnBackgroundThread(request) }
+    }
+    
+    func runRequestOnBackgroundThread(_ request: URLRequest) {
+        // run the request
+        
+        let task: URLSessionDataTask = session.dataTask(with: request) { (data, response, error) in
+            guard let data = data, error == nil else {
+                print(error?.localizedDescription ?? "")
+                return
+            }
+            
+            self.analyzeResults(data)
+        }
+        
+        task.resume()
+    }
+}
+
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+    switch (lhs, rhs) {
+    case let (l?, r?):
+        return l < r
+    case (nil, _?):
+        return true
+    default:
+        return false
+    }
+}
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+    switch (lhs, rhs) {
+    case let (l?, r?):
+        return l > r
+    default:
+        return rhs < lhs
+    }
+}
