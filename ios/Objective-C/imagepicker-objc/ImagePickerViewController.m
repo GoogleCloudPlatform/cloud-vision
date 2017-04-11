@@ -22,10 +22,69 @@
 - (IBAction)loadImageButtonTapped:(UIButton *)sender {
     UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
     imagePicker.delegate = self;
-    imagePicker.allowsEditing = false;
-    imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     
-    [self presentViewController:imagePicker animated:true completion:NULL];
+    
+    //----------------------- Alert Start -----------------------------
+    
+    UIAlertController * alert=   [UIAlertController
+                                  alertControllerWithTitle:@"Photo"
+                                  message:@"Take Photo from Camera or Choose from PhotoLibrary"
+                                  preferredStyle:UIAlertControllerStyleAlert];
+    
+    
+    UIAlertAction* camera = [UIAlertAction
+                             actionWithTitle:@"Camera"
+                             style:UIAlertActionStyleDefault
+                             handler:^(UIAlertAction * action)
+                             {
+                                 
+                                 
+                                 imagePicker.allowsEditing = false;
+                                 imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+                                 
+                                 [self presentViewController:imagePicker animated:true completion:NULL];
+                                 
+                                 [alert dismissViewControllerAnimated:YES completion:nil];
+                                 
+                             }];
+    
+    
+    
+    UIAlertAction* photoLibrary = [UIAlertAction
+                                   actionWithTitle:@"Photo Library"
+                                   style:UIAlertActionStyleDefault
+                                   handler:^(UIAlertAction * action)
+                                   {
+                                       
+                                       imagePicker.allowsEditing = false;
+                                       imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+                                       
+                                       [self presentViewController:imagePicker animated:true completion:NULL];
+                                       
+                                       [alert dismissViewControllerAnimated:YES completion:nil];
+                                       
+                                   }];
+    
+    
+    
+    UIAlertAction* cancel = [UIAlertAction
+                             actionWithTitle:@"Cancel"
+                             style:UIAlertActionStyleDefault
+                             handler:^(UIAlertAction * action)
+                             {
+                                 [alert dismissViewControllerAnimated:YES completion:nil];
+                                 
+                                 
+                             }];
+    
+    [alert addAction:camera];
+    [alert addAction:photoLibrary];
+    [alert addAction:cancel];
+    
+    [self presentViewController:alert animated:YES completion:nil];
+    
+    
+    //----------------------- Alert End -----------------------------
     
 }
 
