@@ -31,10 +31,44 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     @IBAction func loadImageButtonTapped(_ sender: UIButton) {
+
         imagePicker.allowsEditing = false
-        imagePicker.sourceType = .photoLibrary
         
-        present(imagePicker, animated: true, completion: nil)
+        //----------------------- Alert Start -----------------------------
+
+        let alert = UIAlertController(title: "Photo", message: "Choose from Camera or PhotoLibrary", preferredStyle: UIAlertControllerStyle.alert)
+        
+        alert.addAction(UIAlertAction(title: "Camera", style: UIAlertActionStyle.default, handler:  {
+            action in
+            print("Camera");
+            
+            self.imagePicker.sourceType = .camera
+            self.present(self.imagePicker, animated: true, completion: nil)
+            
+            alert.dismiss(animated: true, completion:nil)
+
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Photo Library", style: UIAlertActionStyle.default, handler:  {
+            action in
+            print("Photo Library");
+    
+            self.imagePicker.sourceType = .photoLibrary
+            self.present(self.imagePicker, animated: true, completion: nil)
+            
+            alert.dismiss(animated: true, completion:nil)
+            
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: {
+            action in
+            print("Cancelled");
+        }))
+        
+        present(alert, animated: true, completion: nil)
+        
+        //----------------------- Alert End -----------------------------
+
     }
     
     override func viewDidLoad() {
