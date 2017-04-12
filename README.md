@@ -67,7 +67,7 @@ Cloud Vision API with an image picked from your device’s gallery.
 ### Image Detection Using iOS Device Photos
 
 The Swift and Objective-C versions of this app use the Vision API to run label
-and face detection on an image from the device's photo library. The resulting
+and face detection on an image from the device's camera or from the photo library. The resulting
 labels and face metadata from the API response are displayed in the UI.
 
 Check out the Swift or Objective-C READMEs for specific getting started
