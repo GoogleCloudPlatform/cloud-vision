@@ -1,3 +1,25 @@
+![status: inactive](https://img.shields.io/badge/status-inactive-red.svg)
+
+**This repo is being deprecated**. All new work can be found at a given
+language's repo:
+
+[C# / .NET][c#] | [Go lang][golang] | [Java][java] | [Node.js][nodejs] |
+[PHP][php] | [Python][python] | [Ruby][ruby]
+
+Note: The [Android](android/) and [IOS](ios/) samples haven't been moved to the
+main [Android][android] and [IOS][ios] sample repos yet.
+
+[c#]: //github.com/GoogleCloudPlatform/dotnet-docs-samples/tree/master/vision/api
+[golang]: //github.com/GoogleCloudPlatform/golang-samples/tree/master/vision
+[java]: //github.com/GoogleCloudPlatform/java-docs-samples/tree/master/vision
+[nodejs]: //github.com/GoogleCloudPlatform/nodejs-docs-samples/tree/master/vision
+[php]: //github.com/GoogleCloudPlatform/php-docs-samples/tree/master/vision
+[python]: //github.com/GoogleCloudPlatform/python-docs-samples/tree/master/vision
+[ruby]: //github.com/GoogleCloudPlatform/ruby-docs-samples/tree/master/vision
+[android]: //github.com/GoogleCloudPlatform/android-docs-samples/
+[ios]: //github.com/GoogleCloudPlatform/ios-docs-samples/
+
+-----
 
 # Google Cloud Vision API examples
 
