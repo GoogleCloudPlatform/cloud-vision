@@ -9,7 +9,7 @@ build:
 
 .PHONY: push
 push: build
-	gcloud docker push gcr.io/$(GCLOUD_PROJECT)/awwvision-worker
+	gcloud docker -- push gcr.io/$(GCLOUD_PROJECT)/awwvision-worker
 
 .PHONY: template
 template:
