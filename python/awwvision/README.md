@@ -31,16 +31,17 @@ If you like, you can alternately run this tutorial from your project's
 This example uses [Container Engine](https://cloud.google.com/container-engine/) to set up the Kubernetes cluster.
 
 1. Create a cluster using `gcloud`. You can specify as many nodes as you want,
-   but you need at least one. The `cloud-platform` scope is needed to allow
+   but you need at least one. The `cloud-platform` scope is used to allow
    access to the Pub/Sub and Vision APIs.
+   First set your zone, e.g.:
+
+        gcloud config set compute/zone us-central1-f
+
+   Then start up the cluster:
 
         gcloud container clusters create awwvision \
             --num-nodes 2 \
             --scopes cloud-platform
-
-    You may need to set your zone first, e.g.:
-
-        gcloud config set compute/zone us-central1-f
 
 2. Set up the `kubectl` command-line tool to use the container's credentials.
 
