@@ -16,20 +16,28 @@ Awwvision has three components:
 
 3. Enable the Vision and Pub/Sub APIs. See the ["Getting Started"](https://cloud.google.com/vision/docs/getting-started) page in the Vision API documentation for more information on using the Vision API.
 
-3. Install the [Google Cloud SDK](https://cloud.google.com/sdk):
+4. Install the [Google Cloud SDK](https://cloud.google.com/sdk):
 
         $ curl https://sdk.cloud.google.com | bash
         $ gcloud init
 
-4. Install and start up [Docker](https://www.docker.com/).
+5. Install and start up [Docker](https://www.docker.com/).
+
+If you like, you can alternately run this tutorial from your project's
+[Cloud Shell](https://cloud.google.com/shell/docs/).  In that case, you don't need to do steps 4 and 5.
 
 ## Create a Container Engine cluster
 
 This example uses [Container Engine](https://cloud.google.com/container-engine/) to set up the Kubernetes cluster.
 
 1. Create a cluster using `gcloud`. You can specify as many nodes as you want,
-   but you need at least one. The `cloud-platform` scope is needed to allow
+   but you need at least one. The `cloud-platform` scope is used to allow
    access to the Pub/Sub and Vision APIs.
+   First set your zone, e.g.:
+
+        gcloud config set compute/zone us-central1-f
+
+   Then start up the cluster:
 
         gcloud container clusters create awwvision \
             --num-nodes 2 \
@@ -59,9 +67,8 @@ with information specific to your project— and used to deploy the 'redis',
 ### Check the Kubernetes resources on the cluster
 
 After you've deployed, check that the Kubernetes resources are up and running.
-First, list the [pods](https://github.com/kubernetes/kubernetes/blob/master/docs
-/user-guide/pods.md). You should see something like the following, though your
-pod names will be different.
+First, list the [pods](https://kubernetes.io/docs/concepts/workloads/pods/pod/).
+You should see something like the following, though your pod names will be different.
 
 ```
 $ kubectl get pods
@@ -74,20 +81,20 @@ redis-master-rpap8       1/1       Running   0          2m
 ```
 
 List the
-[replication controllers](https://github.com/kubernetes/kubernetes/blob/master/docs/user-guide/replication-controller.md).
+[deployments](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/).
 You can see the number of replicas specified for each, and the images used.
 
 ```
-$ kubectl get rc
-CONTROLLER         CONTAINER(S)       IMAGE(S)                              SELECTOR                      REPLICAS   AGE
-awwvision-webapp   awwvision-webapp   gcr.io/your-project/awwvision-webapp   app=awwvision,role=frontend   1          4m
-awwvision-worker   awwvision-worker   gcr.io/your-project/awwvision-worker   app=awwvision,role=worker     3          3m
-redis-master       redis-master       redis                                  app=redis,role=master         1          5m
+$ kubectl get deployments -o wide
+NAME               DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE       CONTAINERS         IMAGES                                SELECTOR
+awwvision-webapp   1         1         1            1           1m        awwvision-webapp   gcr.io/your-project/awwvision-webapp   app=awwvision,role=frontend
+awwvision-worker   3         3         3            3           1m        awwvision-worker   gcr.io/your-project/awwvision-worker   app=awwvision,role=worker
+redis-master       1         1         1            1           1m        redis-master       redis                                 app=redis,role=master
 ```
 
 Once deployed, get the external IP address of the webapp
-[service](https://github.com/kubernetes/kubernetes/blob/master/docs/user-
-guide/services.md). It may take a few minutes for the assigned external IP to be
+[service](https://kubernetes.io/docs/concepts/services-networking/service/).
+It may take a few minutes for the assigned external IP to be
 listed in the output.  After a short wait, you should see something like the
 following, though your IPs will be different.
 
@@ -104,7 +111,8 @@ your browser, and click the `Start the Crawler` button.
 
 Next, click `go back`, and you should start to see images from the
 [/r/aww](https://reddit.com/r/aww) subreddit classified by the labels provided
-by the Vision API. You will see some of the images classified multiple times.
+by the Vision API. You will see some of the images classified multiple times, where multiple
+labels are detected for them.
 (You can reload in a bit, in case you brought up the page before the crawler was
 finished).
 

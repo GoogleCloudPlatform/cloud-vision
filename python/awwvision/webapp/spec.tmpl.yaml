@@ -16,8 +16,8 @@ spec:
 
 ---
 
-apiVersion: v1
-kind: ReplicationController
+apiVersion: apps/v1beta1
+kind: Deployment
 metadata:
   name: awwvision-webapp
 spec:
