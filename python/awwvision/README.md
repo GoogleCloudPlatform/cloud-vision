@@ -66,7 +66,7 @@ with information specific to your project— and used to deploy the 'redis',
 ### Check the Kubernetes resources on the cluster
 
 After you've deployed, check that the Kubernetes resources are up and running.
-First, list the [pods](https://github.com/kubernetes/kubernetes/blob/master/docs/user-guide/pods.md).
+First, list the [pods](https://kubernetes.io/docs/concepts/workloads/pods/pod/).
 You should see something like the following, though your pod names will be different.
 
 ```
@@ -92,8 +92,8 @@ redis-master       1         1         1            1           1m        redis-
 ```
 
 Once deployed, get the external IP address of the webapp
-[service](https://github.com/kubernetes/kubernetes/blob/master/docs/user-
-guide/services.md). It may take a few minutes for the assigned external IP to be
+[service](https://kubernetes.io/docs/concepts/services-networking/service/).
+It may take a few minutes for the assigned external IP to be
 listed in the output.  After a short wait, you should see something like the
 following, though your IPs will be different.
 
