@@ -425,7 +425,7 @@
 				DEVELOPMENT_TEAM = 59DNN45TV2;
 				INFOPLIST_FILE = "imagepicker-objc/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.google.cloud.vision.sample.imagepicker-objc";
+				PRODUCT_BUNDLE_IDENTIFIER = com.ammas3.plantit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -437,7 +437,7 @@
 				DEVELOPMENT_TEAM = 59DNN45TV2;
 				INFOPLIST_FILE = "imagepicker-objc/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.google.cloud.vision.sample.imagepicker-objc";
+				PRODUCT_BUNDLE_IDENTIFIER = com.ammas3.plantit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
