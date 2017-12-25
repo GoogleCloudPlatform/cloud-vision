@@ -211,11 +211,10 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0720;
-				ORGANIZATIONNAME = AMMAs3;
+				ORGANIZATIONNAME = "Sara Robinson";
 				TargetAttributes = {
 					1B1684421C3B164200220B6E = {
 						CreatedOnToolsVersion = 7.2;
-						DevelopmentTeam = 59DNN45TV2;
 					};
 					1B16845B1C3B164200220B6E = {
 						CreatedOnToolsVersion = 7.2;
@@ -422,10 +421,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 59DNN45TV2;
 				INFOPLIST_FILE = "imagepicker-objc/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.ammas3.plantit;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.google.cloud.vision.sample.imagepicker-objc";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -434,10 +432,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 59DNN45TV2;
 				INFOPLIST_FILE = "imagepicker-objc/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.ammas3.plantit;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.google.cloud.vision.sample.imagepicker-objc";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

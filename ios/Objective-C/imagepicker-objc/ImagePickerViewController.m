@@ -69,7 +69,7 @@
     // Create our request URL
 
     NSString *urlString = @"https://vision.googleapis.com/v1/images:annotate?key=";
-    NSString *API_KEY = @"AIzaSyBCTKerzapEvwoK2owffjRrcVaMN96KyJQ";
+    NSString *API_KEY = @"YOUR_API_KEY";
     
     NSString *requestString = [NSString stringWithFormat:@"%@%@", urlString, API_KEY];
     
