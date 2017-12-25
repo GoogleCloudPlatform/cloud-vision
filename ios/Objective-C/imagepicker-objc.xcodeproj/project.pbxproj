@@ -15,8 +15,6 @@
 		1B1684561C3B164200220B6E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1B1684541C3B164200220B6E /* LaunchScreen.storyboard */; };
 		1B1684611C3B164200220B6E /* imagepicker_objcTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B1684601C3B164200220B6E /* imagepicker_objcTests.m */; };
 		1B16846C1C3B164200220B6E /* imagepicker_objcUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B16846B1C3B164200220B6E /* imagepicker_objcUITests.m */; };
-		251DAC471FF094520061B53B /* world_map.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 251DAC461FF094520061B53B /* world_map.jpg */; };
-		2551F19D1FF08C8600FDBAE8 /* cactus-example.png in Resources */ = {isa = PBXBuildFile; fileRef = 2551F19C1FF08C8600FDBAE8 /* cactus-example.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,8 +51,6 @@
 		1B1684671C3B164200220B6E /* imagepicker-objcUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "imagepicker-objcUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B16846B1C3B164200220B6E /* imagepicker_objcUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = imagepicker_objcUITests.m; sourceTree = "<group>"; };
 		1B16846D1C3B164200220B6E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		251DAC461FF094520061B53B /* world_map.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = world_map.jpg; sourceTree = "<group>"; };
-		2551F19C1FF08C8600FDBAE8 /* cactus-example.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cactus-example.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,11 +107,9 @@
 				1B16844C1C3B164200220B6E /* ImagePickerViewController.h */,
 				1B16844D1C3B164200220B6E /* ImagePickerViewController.m */,
 				1B16844F1C3B164200220B6E /* Main.storyboard */,
-				251DAC461FF094520061B53B /* world_map.jpg */,
 				1B1684521C3B164200220B6E /* Assets.xcassets */,
 				1B1684541C3B164200220B6E /* LaunchScreen.storyboard */,
 				1B1684571C3B164200220B6E /* Info.plist */,
-				2551F19C1FF08C8600FDBAE8 /* cactus-example.png */,
 				1B1684461C3B164200220B6E /* Supporting Files */,
 			);
 			path = "imagepicker-objc";
@@ -259,8 +253,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				1B1684561C3B164200220B6E /* LaunchScreen.storyboard in Resources */,
-				251DAC471FF094520061B53B /* world_map.jpg in Resources */,
-				2551F19D1FF08C8600FDBAE8 /* cactus-example.png in Resources */,
 				1B1684531C3B164200220B6E /* Assets.xcassets in Resources */,
 				1B1684511C3B164200220B6E /* Main.storyboard in Resources */,
 			);
