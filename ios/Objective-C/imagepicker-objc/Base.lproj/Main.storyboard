@@ -53,10 +53,10 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k2K-pv-N5s">
-                                <rect key="frame" x="139" y="586" width="96" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k2K-pv-N5s">
+                                <rect key="frame" x="146" y="562" width="85" height="72"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Take a picture"/>
+                                <state key="normal" title="Take a picture" image="Screen Shot 2018-01-07 at 6.37.42 PM.png"/>
                                 <connections>
                                     <action selector="loadImageFromCamera:" destination="BYZ-38-t0r" eventType="touchUpInside" id="6GZ-mH-Hik"/>
                                 </connections>
@@ -89,7 +89,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1260" y="437"/>
+            <point key="canvasLocation" x="1260" y="436.69950738916259"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="hwJ-T3-TSK">
@@ -110,4 +110,7 @@
             <point key="canvasLocation" x="448" y="437"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Screen Shot 2018-01-07 at 6.37.42 PM.png" width="620" height="518"/>
+    </resources>
 </document>

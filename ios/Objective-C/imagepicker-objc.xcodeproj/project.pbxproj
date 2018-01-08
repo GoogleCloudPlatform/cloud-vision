@@ -16,6 +16,7 @@
 		1B1684611C3B164200220B6E /* imagepicker_objcTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B1684601C3B164200220B6E /* imagepicker_objcTests.m */; };
 		1B16846C1C3B164200220B6E /* imagepicker_objcUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B16846B1C3B164200220B6E /* imagepicker_objcUITests.m */; };
 		25FA8B6A1FF1AC9D00A314CA /* ItunesArtwork@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 25FA8B691FF1AC9D00A314CA /* ItunesArtwork@2x.png */; };
+		876DBCCF2003110A005BEBD7 /* Screen Shot 2018-01-07 at 6.37.42 PM.png in Resources */ = {isa = PBXBuildFile; fileRef = 876DBCCE2003110A005BEBD7 /* Screen Shot 2018-01-07 at 6.37.42 PM.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,7 @@
 		1B16846B1C3B164200220B6E /* imagepicker_objcUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = imagepicker_objcUITests.m; sourceTree = "<group>"; };
 		1B16846D1C3B164200220B6E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		25FA8B691FF1AC9D00A314CA /* ItunesArtwork@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ItunesArtwork@2x.png"; path = "Assets.xcassets/AppIcon.appiconset/ItunesArtwork@2x.png"; sourceTree = "<group>"; };
+		876DBCCE2003110A005BEBD7 /* Screen Shot 2018-01-07 at 6.37.42 PM.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Screen Shot 2018-01-07 at 6.37.42 PM.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +115,7 @@
 				1B1684541C3B164200220B6E /* LaunchScreen.storyboard */,
 				1B1684571C3B164200220B6E /* Info.plist */,
 				25FA8B691FF1AC9D00A314CA /* ItunesArtwork@2x.png */,
+				876DBCCE2003110A005BEBD7 /* Screen Shot 2018-01-07 at 6.37.42 PM.png */,
 				1B1684461C3B164200220B6E /* Supporting Files */,
 			);
 			path = "imagepicker-objc";
@@ -256,6 +259,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1B1684561C3B164200220B6E /* LaunchScreen.storyboard in Resources */,
+				876DBCCF2003110A005BEBD7 /* Screen Shot 2018-01-07 at 6.37.42 PM.png in Resources */,
 				1B1684531C3B164200220B6E /* Assets.xcassets in Resources */,
 				1B1684511C3B164200220B6E /* Main.storyboard in Resources */,
 				25FA8B6A1FF1AC9D00A314CA /* ItunesArtwork@2x.png in Resources */,
