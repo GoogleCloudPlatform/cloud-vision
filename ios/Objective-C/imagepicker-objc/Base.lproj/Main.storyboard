@@ -53,9 +53,11 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k2K-pv-N5s">
-                                <rect key="frame" x="146" y="562" width="85" height="72"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k2K-pv-N5s">
+                                <rect key="frame" x="145.66666666666666" y="686" width="85" height="106"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="85" id="wRc-sI-SP4"/>
+                                </constraints>
                                 <state key="normal" title="Take a picture" image="Screen Shot 2018-01-07 at 6.37.42 PM.png"/>
                                 <connections>
                                     <action selector="loadImageFromCamera:" destination="BYZ-38-t0r" eventType="touchUpInside" id="6GZ-mH-Hik"/>
@@ -69,12 +71,15 @@
                             <constraint firstItem="NmY-y2-By2" firstAttribute="top" secondItem="gsl-IP-xdD" secondAttribute="bottom" constant="4" id="Cgv-mT-EyS"/>
                             <constraint firstItem="fpo-yh-4NM" firstAttribute="leading" secondItem="gsl-IP-xdD" secondAttribute="leading" id="E86-Ed-27N"/>
                             <constraint firstAttribute="trailing" secondItem="gsl-IP-xdD" secondAttribute="trailing" id="G2T-6n-Rkd"/>
+                            <constraint firstItem="k2K-pv-N5s" firstAttribute="centerX" secondItem="KtP-oa-baM" secondAttribute="centerX" id="GyW-cK-UH1"/>
                             <constraint firstItem="fpo-yh-4NM" firstAttribute="top" secondItem="NmY-y2-By2" secondAttribute="bottom" constant="15" id="Jyw-0f-qqL"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="KtP-oa-baM" secondAttribute="bottom" constant="106" id="Lhw-MM-rjx"/>
                             <constraint firstItem="gsl-IP-xdD" firstAttribute="trailing" secondItem="fpo-yh-4NM" secondAttribute="trailing" id="QDm-8x-olb"/>
                             <constraint firstItem="gsl-IP-xdD" firstAttribute="centerX" secondItem="NmY-y2-By2" secondAttribute="centerX" id="Tzk-Zo-tff"/>
+                            <constraint firstItem="k2K-pv-N5s" firstAttribute="top" secondItem="KtP-oa-baM" secondAttribute="bottom" constant="14" id="UB4-eJ-L0p"/>
                             <constraint firstItem="TUx-as-Jf3" firstAttribute="centerX" secondItem="NmY-y2-By2" secondAttribute="centerX" id="YWh-7u-b2Y"/>
                             <constraint firstItem="KtP-oa-baM" firstAttribute="top" secondItem="fpo-yh-4NM" secondAttribute="bottom" constant="53" id="awn-BG-T2U"/>
+                            <constraint firstAttribute="bottom" secondItem="k2K-pv-N5s" secondAttribute="bottom" constant="20" symbolic="YES" id="f3L-sT-dM8"/>
                             <constraint firstItem="gsl-IP-xdD" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="rKo-nl-lvR"/>
                             <constraint firstItem="KtP-oa-baM" firstAttribute="centerX" secondItem="fpo-yh-4NM" secondAttribute="centerX" id="v8w-nO-FYf"/>
                         </constraints>
