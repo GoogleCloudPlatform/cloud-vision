@@ -29,6 +29,15 @@
     
 }
 
+- (IBAction)loadImageFromCamera:(UIButton *)sender {
+    UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+    imagePicker.delegate = self;
+    imagePicker.allowsEditing = false;
+    imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+    
+    [self presentViewController:imagePicker animated:true completion:NULL];
+}
+
 - (void)imagePickerController:(UIImagePickerController *)imagePicker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
     UIImage *pickedImage = info[UIImagePickerControllerOriginalImage];
     self.imageView.contentMode = UIViewContentModeScaleAspectFit;
@@ -69,7 +78,7 @@
     // Create our request URL
 
     NSString *urlString = @"https://vision.googleapis.com/v1/images:annotate?key=";
-    NSString *API_KEY = @"YOUR_API_KEY";
+    NSString *API_KEY = @"AIzaSyBCTKerzapEvwoK2owffjRrcVaMN96KyJQ";
     
     NSString *requestString = [NSString stringWithFormat:@"%@%@", urlString, API_KEY];
     
