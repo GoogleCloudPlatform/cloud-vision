@@ -20,4 +20,3 @@
 @property (weak, nonatomic) IBOutlet UITextView *labelResults;
 @property (weak, nonatomic) IBOutlet UITextView *faceResults;
 @end
-

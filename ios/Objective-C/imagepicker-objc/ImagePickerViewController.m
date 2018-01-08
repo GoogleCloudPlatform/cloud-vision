@@ -29,6 +29,15 @@
     
 }
 
+- (IBAction)loadImageFromCamera:(UIButton *)sender {
+    UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+    imagePicker.delegate = self;
+    imagePicker.allowsEditing = false;
+    imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+    
+    [self presentViewController:imagePicker animated:true completion:NULL];
+}
+
 - (void)imagePickerController:(UIImagePickerController *)imagePicker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
     UIImage *pickedImage = info[UIImagePickerControllerOriginalImage];
     self.imageView.contentMode = UIViewContentModeScaleAspectFit;
