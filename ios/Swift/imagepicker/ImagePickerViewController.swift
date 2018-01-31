@@ -25,7 +25,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var labelResults: UITextView!
     @IBOutlet weak var faceResults: UITextView!
     
-    var googleAPIKey = "YOUR_API_KEY"
+    var googleAPIKey = "AIzaSyC3cxU0dKKfqx9i-fWtCy3sHBdEtMg66ZA"
     var googleURL: URL {
         return URL(string: "https://vision.googleapis.com/v1/images:annotate?key=\(googleAPIKey)")!
     }
@@ -203,7 +203,7 @@ extension ViewController {
                 ],
                 "features": [
                     [
-                        "type": "LABEL_DETECTION",
+                        "type": "TEXT_DETECTION",
                         "maxResults": 10
                     ],
                     [
