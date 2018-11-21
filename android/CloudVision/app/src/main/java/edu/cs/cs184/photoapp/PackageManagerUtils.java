@@ -1,4 +1,4 @@
-package com.google.sample.cloudvision;
+package edu.cs.cs184.photoapp;
 
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;

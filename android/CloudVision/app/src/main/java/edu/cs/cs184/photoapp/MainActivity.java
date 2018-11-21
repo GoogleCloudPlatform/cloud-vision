@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.sample.cloudvision;
+package edu.cs.cs184.photoapp;
 
 import android.Manifest;
 import android.content.Intent;
@@ -55,11 +55,14 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
+//adapted from the repo we forked this from.
 
 public class MainActivity extends AppCompatActivity {
+
     private static final String CLOUD_VISION_API_KEY = BuildConfig.API_KEY;
     public static final String FILE_NAME = "temp.jpg";
     private static final String ANDROID_CERT_HEADER = "X-Android-Cert";
@@ -67,11 +70,18 @@ public class MainActivity extends AppCompatActivity {
     private static final int MAX_LABEL_RESULTS = 10;
     private static final int MAX_DIMENSION = 1200;
 
+    private final double MIN_CERTAINTY = .5;
+
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int GALLERY_PERMISSIONS_REQUEST = 0;
     private static final int GALLERY_IMAGE_REQUEST = 1;
     public static final int CAMERA_PERMISSIONS_REQUEST = 2;
     public static final int CAMERA_IMAGE_REQUEST = 3;
+
+    public static Bitmap myPhoto;
+    public static Uri myUri;
+    public static ArrayList<String> features;
+    public static ArrayList<Double> percentCertainties;
 
     private TextView mImageDetails;
     private ImageView mMainImage;
@@ -164,6 +174,8 @@ public class MainActivity extends AppCompatActivity {
                         scaleBitmapDown(
                                 MediaStore.Images.Media.getBitmap(getContentResolver(), uri),
                                 MAX_DIMENSION);
+                myUri = uri;
+                myPhoto = bitmap;
 
                 callCloudVision(bitmap);
                 mMainImage.setImageBitmap(bitmap);
@@ -245,11 +257,11 @@ public class MainActivity extends AppCompatActivity {
         return annotateRequest;
     }
 
-    private static class LableDetectionTask extends AsyncTask<Object, Void, String> {
+    private class LabelDetectionTask extends AsyncTask<Object, Void, String> {
         private final WeakReference<MainActivity> mActivityWeakReference;
         private Vision.Images.Annotate mRequest;
 
-        LableDetectionTask(MainActivity activity, Vision.Images.Annotate annotate) {
+        LabelDetectionTask(MainActivity activity, Vision.Images.Annotate annotate) {
             mActivityWeakReference = new WeakReference<>(activity);
             mRequest = annotate;
         }
@@ -270,11 +282,25 @@ public class MainActivity extends AppCompatActivity {
             return "Cloud Vision API request failed. Check logs for details.";
         }
 
+
+        /**
+         * Calls the resulting fragment managing tab view activity
+         */
         protected void onPostExecute(String result) {
             MainActivity activity = mActivityWeakReference.get();
             if (activity != null && !activity.isFinishing()) {
-                TextView imageDetail = activity.findViewById(R.id.image_details);
-                imageDetail.setText(result);
+                Intent intent = new Intent(activity, FilterSelectorActivity.class);
+                Log.e("data",result);
+
+                storeResults(result);
+
+                startActivity(intent);
+
+
+
+                /*TextView imageDetail = activity.findViewById(R.id.image_details);
+                imageDetail.setText(result);*/
+
             }
         }
     }
@@ -285,7 +311,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Do the real work in an async task, because we need to use the network anyway
         try {
-            AsyncTask<Object, Void, String> labelDetectionTask = new LableDetectionTask(this, prepareAnnotationRequest(bitmap));
+            AsyncTask<Object, Void, String> labelDetectionTask = new LabelDetectionTask(this, prepareAnnotationRequest(bitmap));
             labelDetectionTask.execute();
         } catch (IOException e) {
             Log.d(TAG, "failed to make API request because of other IOException " +
@@ -314,18 +340,61 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private static String convertResponseToString(BatchAnnotateImagesResponse response) {
-        StringBuilder message = new StringBuilder("I found these things:\n\n");
+        StringBuilder message = new StringBuilder();
 
         List<EntityAnnotation> labels = response.getResponses().get(0).getLabelAnnotations();
         if (labels != null) {
             for (EntityAnnotation label : labels) {
-                message.append(String.format(Locale.US, "%.3f: %s", label.getScore(), label.getDescription()));
+                message.append(String.format(Locale.US, "%.4f: %s", label.getScore(), label.getDescription()));
                 message.append("\n");
             }
         } else {
-            message.append("nothing");
+            message.append("nothing: 0.0\n");
         }
 
         return message.toString();
+    }
+
+
+
+    private void storeResults(String response){
+
+        //splits results, which were in the form float: string, to a string array
+        String[] splitResultsArray = (String[])response.split(": ");
+        ArrayList<String> splitResults = new ArrayList<>();
+
+        try {
+            for (String s1 : splitResultsArray)
+                splitResults.addAll(Arrays.asList( s1.split("\n")));
+        }catch (Exception e){Toast.makeText(this,"Error receiving response \uD83D\uDE22",Toast.LENGTH_SHORT).show(); throw new RuntimeException("Exception: malformed response");}
+
+        features = new ArrayList<>();
+        percentCertainties = new ArrayList<>();
+
+        for(int i=0; i<splitResults.size(); i++){
+            //even results are strings, odd results are features.
+            Log.e("res","result["+i+"]: "+splitResults.get(i));
+            if(i%2==0) if(Double.parseDouble( splitResults.get(i))>=MIN_CERTAINTY) percentCertainties.add(100.0*Double.parseDouble(splitResults.get(i))); else i++;
+            else features.add(splitResults.get(i));
+        }
+
+        if(features.size()!=percentCertainties.size()){Toast.makeText(this,"Error receiving response \uD83D\uDE22",Toast.LENGTH_SHORT).show(); throw new RuntimeException("Exception: malformed response");}
+
+
+        if(features.size()==0) {
+            features.add(splitResults.get(0));
+            percentCertainties.add(Double.parseDouble( splitResults.get(1)));
+            Toast.makeText(this, "Your image didn't have any good matches, but here's the best guess.", Toast.LENGTH_SHORT).show();
+        }
+
+
+        //todo: choose and/or generate filters, apply them to the bitmap, and store them in an array
+
+
+
+        Log.e("split","features: " + features);
+        Log.e("split","pcts: " + percentCertainties);
+
+
     }
 }

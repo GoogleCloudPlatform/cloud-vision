@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.sample.cloudvision;
+package edu.cs.cs184.photoapp;
 
 import android.app.Activity;
 import android.content.pm.PackageManager;
