@@ -1,4 +1,0 @@
-gunicorn==19.4.1
-flask==0.10.1
-redis==2.10.5
-psq==0.2.1

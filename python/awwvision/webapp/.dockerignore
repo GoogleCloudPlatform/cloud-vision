@@ -1,8 +1,0 @@
-Dockerfile
-.dockerignore
-.gitignore
-*.pyc
-Makefile
-spec.yaml
-spec.tmpl.yaml
-env
