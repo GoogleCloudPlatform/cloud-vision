@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion "27.0.3"
+    buildToolsVersion '28.0.3'
 
     defaultConfig {
         applicationId "com.google.sample.cloudvision"
@@ -17,7 +17,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         buildTypes.each {
-            it.buildConfigField 'String', 'API_KEY', ApiKey
+            it.buildConfigField 'String', 'API_KEY', '"AIzaSyBUH2Bk2nmm9P1i2j11eJp8I5QfRbvQN78"'
         }
     }
     compileOptions {
