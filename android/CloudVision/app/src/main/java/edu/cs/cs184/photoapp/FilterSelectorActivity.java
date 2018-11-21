@@ -56,7 +56,8 @@ public class FilterSelectorActivity extends AppCompatActivity {
         mTabLayout = (TabLayout) findViewById(R.id.fragmentTabs);
         mTabLayout.setTabMode(TabLayout.MODE_FIXED);
         mTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-
+        
+        // todo: fix tab selection listener - it currently causes the app to reopen?
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
