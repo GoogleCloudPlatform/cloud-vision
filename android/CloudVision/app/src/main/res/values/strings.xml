@@ -5,7 +5,7 @@
     <string name="image_preview_header">Preview:</string>
     <string name="loading_message">Uploading image. Please wait.</string>
     <string name="feature_message">Feature detected: </string>
-    <string name="feature_message2">!\n Certainty: </string>
+    <string name="feature_message2">\n Certainty: </string>
     <string name="feature_error">Error fetching feature</string>
 
 
@@ -16,6 +16,7 @@
 
     <string name="image_picker_error">Something is wrong with that image. Pick a different one please.</string>
     <string name="image_picker_error_1">Something is wrong with that image. Pick a different one please. (URI null)</string>
+    <string name="grid_header">Choose an image or use the button to add an image.</string>
     <string name="title_activity_filter_selector">FilterSelectorActivity</string>
     <string name="section_format">Hello World from section: %1$d</string>
 

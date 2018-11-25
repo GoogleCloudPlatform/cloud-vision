@@ -343,6 +343,8 @@ public class MainActivity extends AppCompatActivity {
 
                 startActivity(intent);
 
+                mImageDetails.setText(R.string.grid_header);
+
 
 
                 /*TextView imageDetail = activity.findViewById(R.id.image_details);

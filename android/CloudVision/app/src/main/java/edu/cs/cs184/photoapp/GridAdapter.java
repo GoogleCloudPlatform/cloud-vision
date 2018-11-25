@@ -2,7 +2,6 @@ package edu.cs.cs184.photoapp;
 
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.util.Log;
 import android.view.View;
@@ -17,15 +16,19 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ *  GridAdapter - displays pictures in gridview, uses Picsum Lorem images as filler
+ *  Based on ImageAdapter class from HW4
+ *  Mitchell Lewis - 11/25/2018
+ **/
 
 public class GridAdapter extends BaseAdapter {
     private Context mContext;
     ImageRetriever mImageRetriever;
-    ArrayList<Uri> localPics = new ArrayList<>();
+    ArrayList<Uri> uriList = new ArrayList<>();
     final static int MAX_DIMENSION = 1200;
     final static int NUM_STOCK_PICS = 30;
 
@@ -34,7 +37,7 @@ public class GridAdapter extends BaseAdapter {
     }
 
     public int getCount() {
-        return localPics.size();
+        return uriList.size();
     }
 
     public Object getItem(int position) {
@@ -58,10 +61,10 @@ public class GridAdapter extends BaseAdapter {
             imageView = (ImageView) convertView;
         }
         imageView.setVisibility(View.INVISIBLE);
-        if(position < localPics.size()) {
-            Log.d("Picture Displaying: ", localPics.get(position).toString());
+        if(position < uriList.size()) {
+            //Log.d("Picture Displaying: ", uriList.get(position).toString());
 
-            Picasso.get().load(localPics.get(position)).centerCrop().resize(200, 200).into(imageView);
+            Picasso.get().load(uriList.get(position)).centerCrop().resize(200, 200).into(imageView);
 
             imageView.setVisibility(View.VISIBLE);
         }
@@ -69,12 +72,12 @@ public class GridAdapter extends BaseAdapter {
     }
 
     public void addImage(Uri uri){
-        localPics.add(0, uri);
+        uriList.add(0, uri);
         notifyDataSetInvalidated();
     }
 
 
-    // gets list of pics, adds those with (height<=1024) to db, then sorts by rating of 0 (returns all pics)
+    // gets list of pics, chooses 30 random pictures and adds to list
     public void populate(){
         mImageRetriever = ImageRetriever.getInstance(mContext );
         mImageRetriever.listImagesRequest(new Response.Listener<JSONArray>() {
@@ -87,9 +90,9 @@ public class GridAdapter extends BaseAdapter {
                         JSONObject item = response.getJSONObject(randIndex);
 
                         String src = "https://picsum.photos/"+MAX_DIMENSION+"/"+MAX_DIMENSION+"?image="+item.getInt("id");
-                        Log.d("Stockpix", "Adding: "+src);
+                        //Log.d("Stockpix", "Adding: "+src);
                         Uri uri = Uri.parse(src);
-                        localPics.add(uri);
+                        uriList.add(uri);
                         notifyDataSetInvalidated();
 
                     }
@@ -107,7 +110,7 @@ public class GridAdapter extends BaseAdapter {
     }
 
     public Uri getEntry(int pos){
-        return localPics.get(pos);
+        return uriList.get(pos);
     }
 
     public void restore(int size){
