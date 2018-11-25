@@ -19,6 +19,7 @@ package edu.cs.cs184.photoapp;
 import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -31,6 +32,9 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,6 +53,8 @@ import com.google.api.services.vision.v1.model.BatchAnnotateImagesResponse;
 import com.google.api.services.vision.v1.model.EntityAnnotation;
 import com.google.api.services.vision.v1.model.Feature;
 import com.google.api.services.vision.v1.model.Image;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -85,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView mImageDetails;
     private ImageView mMainImage;
+    private GridAdapter mGridAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,8 +110,23 @@ public class MainActivity extends AppCompatActivity {
             builder.create().show();
         });
 
+        mGridAdapter = new GridAdapter(this);
+        GridView gridview = (GridView) findViewById(R.id.gridview);
+        gridview.setAdapter(mGridAdapter);
+        mGridAdapter.populate();
+
+
+
+        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Uri selectedUri = mGridAdapter.getEntry(position);
+                if(selectedUri != null) uploadImage(selectedUri);
+            }
+        });
+
         mImageDetails = findViewById(R.id.image_details);
-        mMainImage = findViewById(R.id.main_image);
+
     }
 
     public void startGalleryChooser() {
@@ -141,10 +163,10 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == GALLERY_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
-            uploadImage(data.getData());
+            mGridAdapter.addImage(data.getData());
         } else if (requestCode == CAMERA_IMAGE_REQUEST && resultCode == RESULT_OK) {
             Uri photoUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", getCameraFile());
-            uploadImage(photoUri);
+            mGridAdapter.addImage(photoUri);
         }
     }
 
@@ -170,15 +192,40 @@ public class MainActivity extends AppCompatActivity {
         if (uri != null) {
             try {
                 // scale the image to save on bandwidth
-                Bitmap bitmap =
-                        scaleBitmapDown(
-                                MediaStore.Images.Media.getBitmap(getContentResolver(), uri),
-                                MAX_DIMENSION);
-                myUri = uri;
-                myPhoto = bitmap;
+                if(uri.toString().contains("picsum")) {
+                    Picasso.get().load(uri).into(new Target() {
+                        @Override
+                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                            myPhoto = bitmap;
+                            myUri = uri;
+                            callCloudVision(myPhoto);
+                        }
 
-                callCloudVision(bitmap);
-                mMainImage.setImageBitmap(bitmap);
+                        @Override
+                        public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+
+                        }
+
+                        @Override
+                        public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                        }
+                    });
+
+
+                }
+                else {
+                    Bitmap bitmap =
+                            scaleBitmapDown(
+                                    MediaStore.Images.Media.getBitmap(getContentResolver(), uri),
+                                    MAX_DIMENSION);
+                    myUri = uri;
+                    myPhoto = bitmap;
+                    callCloudVision(bitmap);
+                }
+
+
+
 
             } catch (IOException e) {
                 Log.d(TAG, "Image picking failed because " + e.getMessage());
@@ -186,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
             }
         } else {
             Log.d(TAG, "Image picker gave us a null image.");
-            Toast.makeText(this, R.string.image_picker_error, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.image_picker_error_1, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -389,6 +436,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         //todo: choose and/or generate filters, apply them to the bitmap, and store them in an array
+
+        //todo: prioritize tags to apply auto-filter based on most important
 
 
 

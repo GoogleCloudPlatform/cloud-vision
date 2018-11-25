@@ -32,9 +32,9 @@ public class FilterFragment extends Fragment {
     private TextView filterText;
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private double mParam2;
-    private byte[] mParam3;
+    private String inFeature;
+    private double inPercent;
+    private byte[] inBitmap;
 
     ImageView imageView;
     Bitmap currentBitmap;
@@ -102,14 +102,17 @@ public class FilterFragment extends Fragment {
         currentBitmap = Bitmap.createBitmap(10,10,Bitmap.Config.ARGB_8888);
         if (getArguments() != null) {
             Log.e("as","arguments aren't null");
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getDouble(ARG_PARAM2);
-            mParam3 = getArguments().getByteArray(ARG_PARAM3);
+            inFeature = getArguments().getString(ARG_PARAM1);
+            inPercent = getArguments().getDouble(ARG_PARAM2);
+            inBitmap = getArguments().getByteArray(ARG_PARAM3);
+
+            // rounds to two decimal places (having a few decimals makes it look precise, but there were too many)
+            double displayPercent = (double) Math.round(inPercent * 100) / 100;
 
             try {
-                String filterMessage = getResources().getString(R.string.feature_message) + mParam1 + getResources().getString(R.string.feature_message2) + mParam2;
+                String filterMessage = getResources().getString(R.string.feature_message) + inFeature + getResources().getString(R.string.feature_message2) + displayPercent;
                 filterText.setText(filterMessage);
-                currentBitmap = BitmapFactory.decodeByteArray(mParam3,0,mParam3.length);
+                currentBitmap = BitmapFactory.decodeByteArray(inBitmap,0, inBitmap.length);
                 imageView.setImageBitmap(currentBitmap);
             } catch (Exception e) {
 

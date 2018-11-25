@@ -54,23 +54,22 @@ public class FilterSelectorActivity extends AppCompatActivity {
         customFragmentsPagerAdapter = new CustomFragmentsPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.fragmentsPager);
         mTabLayout = (TabLayout) findViewById(R.id.fragmentTabs);
-        mTabLayout.setTabMode(TabLayout.MODE_FIXED);
+        mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         mTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         
-        // todo: fix tab selection listener - it currently causes the app to reopen?
+        // done: fix tab selection listener - it currently causes the app to reopen?
+        // solution : it was trying to set the icon color and there was no icon, removed line
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
 
                 mViewPager.setCurrentItem(tab.getPosition());
-                tab.getIcon().setColorFilter(getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_IN);
                 tab.select();
 
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-                tab.getIcon().setColorFilter(getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_IN);
                 //tab.select();
 
 
@@ -137,7 +136,9 @@ public class FilterSelectorActivity extends AppCompatActivity {
             //Fragment.instantiate(this, FilterFragment.class.getName(), args);
 
 
-            //todo: set new ontablistener to select the right fragment
+            //fixed: set new ontablistener to select the right fragment
+            // solution: blank tab in layout was pushing them all forward by 1, removed blank tab
+
             //todo: make the tabs scrollable correctly
         }
 
