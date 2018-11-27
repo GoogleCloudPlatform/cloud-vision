@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.zomato.photofilters.SampleFilters;
 import com.zomato.photofilters.imageprocessors.Filter;
 import com.zomato.photofilters.imageprocessors.SubFilter;
 import com.zomato.photofilters.imageprocessors.subfilters.BrightnessSubFilter;
@@ -48,13 +47,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         filterMap = new HashMap<>();
-        originalBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.dsc_0171);
+        originalBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.img_20181114_174507);
 
 //todo: potentially make these into an array, or something else more elegant
 
 
         final ImageView imageView = (ImageView) findViewById(R.id.image);
-        imageView.setImageResource(R.drawable.dsc_0171);
+        imageView.setImageResource(R.drawable.img_20181114_174507);
 
         final SeekBar brightnessSlider = (SeekBar) findViewById(R.id.seekBar1);
         final TextView brightnessLabel = (TextView) findViewById(R.id.textView1);
@@ -87,7 +86,9 @@ public class MainActivity extends AppCompatActivity {
 
                 if(filterMap.containsKey("myfilter"))
                      removeFromFilterMap("myfilter");
-                else addToFilterMap("myfilter",(ArrayList) SampleFilters.getNightWhisperFilter().getSubFilters());
+                //else addToFilterMap("myfilter",(ArrayList) SampleFilters.getNightWhisperFilter().getSubFilters());
+                else addToFilterMap("myfilter",(ArrayList) CustomFilters.getNightVisionFilter().getSubFilters());
+
 
                 imageView.setImageBitmap(getBitmap());
             }

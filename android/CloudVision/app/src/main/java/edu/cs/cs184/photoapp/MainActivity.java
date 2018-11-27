@@ -69,6 +69,12 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
+    //loads zomato filter library
+    static {
+        System.loadLibrary("NativeImageProcessor");
+
+    }
+
     private static final String CLOUD_VISION_API_KEY = BuildConfig.API_KEY;
     public static final String FILE_NAME = "temp.jpg";
     private static final String ANDROID_CERT_HEADER = "X-Android-Cert";
