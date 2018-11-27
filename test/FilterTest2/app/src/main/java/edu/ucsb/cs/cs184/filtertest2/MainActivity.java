@@ -2,6 +2,7 @@ package edu.ucsb.cs.cs184.filtertest2;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Bitmap originalBitmap;
     private Bitmap mipMap;
+    private Bitmap cachedBitmap;
 
     // save sub filters to a map so we don't compound filters when adding the same type of subfilter
     private Map<String,ArrayList<SubFilter>> filterMap;
@@ -96,12 +98,15 @@ public class MainActivity extends AppCompatActivity {
             public boolean onTouch(View view, MotionEvent motionEvent) {
 
                 if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                    Bitmap currentBitmap = originalBitmap.copy( Bitmap.Config.ARGB_8888,true);
-                    imageView.setImageBitmap(getFilter().processFilter(currentBitmap));
-                    //imageView.setImageBitmap(getCachedBitmap());
+                    //Bitmap currentBitmap = originalBitmap.copy( Bitmap.Config.ARGB_8888,true);
+                    //imageView.setImageBitmap(getFilter().processFilter(currentBitmap));
+                    imageView.setImageBitmap(cachedBitmap);
                 }
                 if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    cachedBitmap =  ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+
                     imageView.setImageBitmap(originalBitmap);
+                    //cachedBitmap = getFilter().processFilter(getBitmap());
 
                 }
                 return true;
