@@ -17,24 +17,19 @@
 package edu.cs.cs184.photoapp;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,8 +48,6 @@ import com.google.api.services.vision.v1.model.BatchAnnotateImagesResponse;
 import com.google.api.services.vision.v1.model.EntityAnnotation;
 import com.google.api.services.vision.v1.model.Feature;
 import com.google.api.services.vision.v1.model.Image;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -65,15 +58,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-//adapted from the repo we forked this from.
+// adapted from the repo we forked this from.
+
+// TODO: global tasks include implementing save to disk, ordering th filters correctly, and displaying info
+// TODO: a few other small things in some of the activities
+// TODO: orientation changes and state saving (need to check if this is necessary)
 
 public class MainActivity extends AppCompatActivity {
-
-    //loads zomato filter library
-    static {
-        System.loadLibrary("NativeImageProcessor");
-
-    }
 
     private static final String CLOUD_VISION_API_KEY = BuildConfig.API_KEY;
     public static final String FILE_NAME = "temp.jpg";
@@ -95,45 +86,36 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<String> features;
     public static ArrayList<Double> percentCertainties;
 
-    private TextView mImageDetails;
-    private ImageView mMainImage;
-    private GridAdapter mGridAdapter;
 
+    private ProgressDialog mProgressDialog;
+    private TextView statusText;
+    private ImageView mMainImage;
+
+
+
+
+    static {
+        System.loadLibrary("NativeImageProcessor");
+
+    }
+
+    // TODO: make the alert show again if the back button is pressed during gallery or camera
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(view -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-            builder
-                    .setMessage(R.string.dialog_select_prompt)
-                    .setPositiveButton(R.string.dialog_select_gallery, (dialog, which) -> startGalleryChooser())
-                    .setNegativeButton(R.string.dialog_select_camera, (dialog, which) -> startCamera());
-            builder.create().show();
-        });
-
-        mGridAdapter = new GridAdapter(this);
-        GridView gridview = (GridView) findViewById(R.id.gridview);
-        gridview.setAdapter(mGridAdapter);
-        mGridAdapter.populate();
-
-
-
-        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Uri selectedUri = mGridAdapter.getEntry(position);
-                if(selectedUri != null) uploadImage(selectedUri);
-            }
-        });
-
-        mImageDetails = findViewById(R.id.image_details);
-
+        statusText = findViewById(R.id.image_details);
+        mMainImage = findViewById(R.id.main_image);
+        new AlertDialog.Builder(MainActivity.this)
+                .setTitle(R.string.dialog_select_prompt)
+                .setMessage("\n")
+                .setPositiveButton(R.string.dialog_select_gallery, (dialog, which) -> startGalleryChooser())
+                .setNegativeButton(R.string.dialog_select_camera, (dialog, which) -> startCamera())
+                .setCancelable(false)
+                .create().show();
     }
+
 
     public void startGalleryChooser() {
         if (PermissionUtils.requestPermission(this, GALLERY_PERMISSIONS_REQUEST, Manifest.permission.READ_EXTERNAL_STORAGE)) {
@@ -169,11 +151,13 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == GALLERY_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
-            mGridAdapter.addImage(data.getData());
+            uploadImage(data.getData());
         } else if (requestCode == CAMERA_IMAGE_REQUEST && resultCode == RESULT_OK) {
             Uri photoUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", getCameraFile());
-            mGridAdapter.addImage(photoUri);
+            uploadImage(photoUri);
         }
+
+        statusText.setClickable(false);
     }
 
     @Override
@@ -198,40 +182,25 @@ public class MainActivity extends AppCompatActivity {
         if (uri != null) {
             try {
                 // scale the image to save on bandwidth
-                if(uri.toString().contains("picsum")) {
-                    Picasso.get().load(uri).into(new Target() {
-                        @Override
-                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                            myPhoto = bitmap;
-                            myUri = uri;
-                            callCloudVision(myPhoto);
-                        }
-
-                        @Override
-                        public void onBitmapFailed(Exception e, Drawable errorDrawable) {
-
-                        }
-
-                        @Override
-                        public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                        }
-                    });
+                Bitmap bitmap =
+                        scaleBitmapDown(
+                                MediaStore.Images.Media.getBitmap(getContentResolver(), uri),
+                                MAX_DIMENSION);
+                myUri = uri;
+                myPhoto = bitmap;
+                mMainImage.setImageBitmap(bitmap);
 
 
-                }
-                else {
-                    Bitmap bitmap =
-                            scaleBitmapDown(
-                                    MediaStore.Images.Media.getBitmap(getContentResolver(), uri),
-                                    MAX_DIMENSION);
-                    myUri = uri;
-                    myPhoto = bitmap;
-                    callCloudVision(bitmap);
-                }
+                // from https://stackoverflow.com/questions/35079083/android-loading-circle-spinner-between-two-activity
+
+                mProgressDialog = new ProgressDialog(MainActivity.this);
+                mProgressDialog.setTitle(R.string.loading_message);
+                mProgressDialog.setIndeterminate(false);
+                mProgressDialog.setCancelable(false);
+                mProgressDialog.show();
 
 
-
+                callCloudVision(bitmap);
 
             } catch (IOException e) {
                 Log.d(TAG, "Image picking failed because " + e.getMessage());
@@ -239,7 +208,7 @@ public class MainActivity extends AppCompatActivity {
             }
         } else {
             Log.d(TAG, "Image picker gave us a null image.");
-            Toast.makeText(this, R.string.image_picker_error_1, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.image_picker_error, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -344,25 +313,20 @@ public class MainActivity extends AppCompatActivity {
             if (activity != null && !activity.isFinishing()) {
                 Intent intent = new Intent(activity, FilterSelectorActivity.class);
                 Log.e("data",result);
+                mProgressDialog.dismiss();
 
                 storeResults(result);
 
                 startActivity(intent);
 
-                mImageDetails.setText(R.string.grid_header);
 
 
-
-                /*TextView imageDetail = activity.findViewById(R.id.image_details);
-                imageDetail.setText(result);*/
 
             }
         }
     }
 
     private void callCloudVision(final Bitmap bitmap) {
-        // Switch text to loading
-        mImageDetails.setText(R.string.loading_message);
 
         // Do the real work in an async task, because we need to use the network anyway
         try {
@@ -374,7 +338,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private Bitmap scaleBitmapDown(Bitmap bitmap, int maxDimension) {
+    protected static Bitmap scaleBitmapDown(Bitmap bitmap, int maxDimension) {
 
         int originalWidth = bitmap.getWidth();
         int originalHeight = bitmap.getHeight();
@@ -444,8 +408,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         //todo: choose and/or generate filters, apply them to the bitmap, and store them in an array
-
-        //todo: prioritize tags to apply auto-filter based on most important
 
 
 
