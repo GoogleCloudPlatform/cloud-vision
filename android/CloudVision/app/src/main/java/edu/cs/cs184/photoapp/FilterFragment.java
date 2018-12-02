@@ -45,10 +45,6 @@ public class FilterFragment extends Fragment {
 
 
 
-    private TextView infoText;
-
-    private String inFeature;
-    private double inPercent;
     private byte[] inBitmap;
     private int inIndex;
     private String inFilterName;
@@ -56,12 +52,17 @@ public class FilterFragment extends Fragment {
 
     // determines reasonable resolutions for the mipmap in order to maximize fidelty and framerate
     final int MIPMAP_MAX_DIMENSION = 1000;
-    final int MIPMAP_MIN_DIMENSION = 350;
-    final int MIPMAP_STEP = 150;
+    final int MIPMAP_MIN_DIMENSION = 400;
+    final int MIPMAP_STEP = 95;
 
     private Bitmap originalBitmap;
     private Bitmap mipMap;
-    private Bitmap cachedBitmap;
+    private Bitmap tempBitmap;
+
+
+    int currBrightness;
+    int currContrast;
+    int currSaturation;
 
     // save sub filters to a map so we don't compound filters when adding the same type of subfilter
     private Map<String,ArrayList<SubFilter>> filterMap;
@@ -84,12 +85,6 @@ public class FilterFragment extends Fragment {
 
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -185,6 +180,8 @@ public class FilterFragment extends Fragment {
 
         final Filter mFilter = CustomFilters.getFilter(inFilterName,FilterSelectorActivity.getContext());
 
+
+
         addToFilterMap("myfilter",(ArrayList) mFilter.getSubFilters());
         imageView.setImageBitmap(getBitmap());
 
@@ -206,13 +203,13 @@ public class FilterFragment extends Fragment {
                 if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                     //Bitmap currentBitmap = originalBitmap.copy( Bitmap.Config.ARGB_8888,true);
                     //imageView.setImageBitmap(getFilter().processFilter(currentBitmap));
-                    imageView.setImageBitmap(cachedBitmap);
+                    imageView.setImageBitmap(tempBitmap);
                 }
                 if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                    cachedBitmap =  ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+                    tempBitmap =  ((BitmapDrawable) imageView.getDrawable()).getBitmap();
 
                     imageView.setImageBitmap(originalBitmap);
-                    //cachedBitmap = getFilter().processFilter(getBitmap());
+                    //tempBitmap = getFilter().processFilter(getBitmap());
 
                 }
                 return true;
@@ -258,6 +255,7 @@ public class FilterFragment extends Fragment {
             public void onStopTrackingTouch(SeekBar seekBar) {
                 updateMipMap();
                 imageView.setImageBitmap(getBitmap());
+                currBrightness = seekBar.getProgress();
 
 
             }
@@ -287,6 +285,7 @@ public class FilterFragment extends Fragment {
             {
                 updateMipMap();
                 imageView.setImageBitmap(getBitmap());
+                currContrast = seekBar.getProgress();
 
 
             }
@@ -315,13 +314,30 @@ public class FilterFragment extends Fragment {
             public void onStopTrackingTouch(SeekBar seekBar) {
                 updateMipMap();
                 imageView.setImageBitmap(getBitmap());
+                currSaturation = seekBar.getProgress();
             }
         });
 
-
-
+        // todo: make sure it always saves the variables (or make sure the demo video doesn't show them resetting ;) )
+        if(savedInstanceState!=null){
+            brightnessSlider.setProgress( savedInstanceState.getInt("br"));
+            contrastSlider.setProgress( savedInstanceState.getInt("con"));
+            saturationSlider.setProgress( savedInstanceState.getInt("sat"));
+        }
 
     }
+
+    // todo: make sure it always saves the variables (or make sure the demo video doesn't show them resetting ;) )
+    public void onSaveInstanceState(Bundle state) {
+        super.onSaveInstanceState(state);
+        state.putInt("br",currBrightness);
+        state.putInt("con",currContrast);
+        state.putInt("sat",currSaturation);
+        state.putBundle("main",state);
+
+    }
+
+
     private Bitmap getBitmap(){
         return getFilter().processFilter(originalBitmap.copy(Bitmap.Config.ARGB_8888,true));
     }

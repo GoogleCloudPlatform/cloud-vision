@@ -30,6 +30,7 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -86,13 +87,9 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<String> features;
     public static ArrayList<Double> percentCertainties;
 
-
     private ProgressDialog mProgressDialog;
     private TextView statusText;
     private ImageView mMainImage;
-
-
-
 
     static {
         System.loadLibrary("NativeImageProcessor");
@@ -107,6 +104,11 @@ public class MainActivity extends AppCompatActivity {
 
         statusText = findViewById(R.id.image_details);
         mMainImage = findViewById(R.id.main_image);
+
+        //showPrompt();
+    }
+
+    public void showPrompt(){
         new AlertDialog.Builder(MainActivity.this)
                 .setTitle(R.string.dialog_select_prompt)
                 .setMessage("\n")
@@ -114,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
                 .setNegativeButton(R.string.dialog_select_camera, (dialog, which) -> startCamera())
                 .setCancelable(false)
                 .create().show();
+
     }
 
 
@@ -318,6 +321,7 @@ public class MainActivity extends AppCompatActivity {
                 storeResults(result);
 
                 startActivity(intent);
+                statusText.setText(getResources().getString(R.string.select_text));
 
 
 
@@ -355,7 +359,7 @@ public class MainActivity extends AppCompatActivity {
             resizedHeight = maxDimension;
             resizedWidth = maxDimension;
         }
-        return Bitmap.createScaledBitmap(bitmap, resizedWidth, resizedHeight, false);
+        return Bitmap.createScaledBitmap(bitmap, resizedWidth, resizedHeight, true);
     }
 
     private static String convertResponseToString(BatchAnnotateImagesResponse response) {
@@ -416,4 +420,12 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if(event.getAction()==MotionEvent.ACTION_UP)
+        showPrompt();
+        return true;
+    }
+
 }
