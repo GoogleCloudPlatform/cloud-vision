@@ -49,7 +49,6 @@ import com.google.api.services.vision.v1.model.BatchAnnotateImagesResponse;
 import com.google.api.services.vision.v1.model.EntityAnnotation;
 import com.google.api.services.vision.v1.model.Feature;
 import com.google.api.services.vision.v1.model.Image;
-import com.google.api.services.vision.v1.model.Landmark;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -335,7 +334,7 @@ public class MainActivity extends AppCompatActivity {
                 message.append("\n");
             }
         } else {
-
+            message.append("No Labels\n");
         }
 
         message.append("Landmark Recognition:\n");
@@ -345,7 +344,7 @@ public class MainActivity extends AppCompatActivity {
                 message.append("\n");
             }
         } else {
-
+            message.append("No landmarks");
         }
 
         return message.toString();
