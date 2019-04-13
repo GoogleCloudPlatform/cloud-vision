@@ -49,6 +49,7 @@ import com.google.api.services.vision.v1.model.BatchAnnotateImagesResponse;
 import com.google.api.services.vision.v1.model.EntityAnnotation;
 import com.google.api.services.vision.v1.model.Feature;
 import com.google.api.services.vision.v1.model.Image;
+import com.google.api.services.vision.v1.model.Landmark;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -224,13 +225,22 @@ public class MainActivity extends AppCompatActivity {
             base64EncodedImage.encodeContent(imageBytes);
             annotateImageRequest.setImage(base64EncodedImage);
 
-            // add the features we want
-            annotateImageRequest.setFeatures(new ArrayList<Feature>() {{
-                Feature labelDetection = new Feature();
-                labelDetection.setType("LABEL_DETECTION");
-                labelDetection.setMaxResults(MAX_LABEL_RESULTS);
-                add(labelDetection);
-            }});
+            //add the features we want
+            ArrayList<Feature> featureList = new ArrayList<>();
+
+            //label detection
+            Feature labelDetection = new Feature();
+            labelDetection.setType("LABEL_DETECTION");
+            labelDetection.setMaxResults(MAX_LABEL_RESULTS);
+            featureList.add(labelDetection);
+
+            //landmark detection
+            Feature landmarkDetection = new Feature();
+            landmarkDetection.setType("LANDMARK_DETECTION");
+            landmarkDetection.setMaxResults(MAX_LABEL_RESULTS);
+            featureList.add(landmarkDetection);
+
+            annotateImageRequest.setFeatures(featureList);
 
             // Add the list of one thing to the request
             add(annotateImageRequest);
@@ -317,13 +327,25 @@ public class MainActivity extends AppCompatActivity {
         StringBuilder message = new StringBuilder("I found these things:\n\n");
 
         List<EntityAnnotation> labels = response.getResponses().get(0).getLabelAnnotations();
+        List<EntityAnnotation> landmarks = response.getResponses().get(0).getLandmarkAnnotations();
+        message.append("Label Recognition:\n");
         if (labels != null) {
             for (EntityAnnotation label : labels) {
                 message.append(String.format(Locale.US, "%.3f: %s", label.getScore(), label.getDescription()));
                 message.append("\n");
             }
         } else {
-            message.append("nothing");
+
+        }
+
+        message.append("Landmark Recognition:\n");
+        if (landmarks != null) {
+            for (EntityAnnotation landmark : landmarks) {
+                message.append(String.format(Locale.US, "%.3f: %s", landmark.getScore(), landmark.getDescription()));
+                message.append("\n");
+            }
+        } else {
+
         }
 
         return message.toString();
