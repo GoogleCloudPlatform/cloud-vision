@@ -327,7 +327,7 @@ public class MainActivity extends AppCompatActivity {
 
         List<EntityAnnotation> labels = response.getResponses().get(0).getLabelAnnotations();
         List<EntityAnnotation> landmarks = response.getResponses().get(0).getLandmarkAnnotations();
-        message.append("Label Recognition:\n");
+        message.append("Label Detection:\n");
         if (labels != null) {
             for (EntityAnnotation label : labels) {
                 message.append(String.format(Locale.US, "%.3f: %s", label.getScore(), label.getDescription()));
@@ -337,7 +337,7 @@ public class MainActivity extends AppCompatActivity {
             message.append("No Labels\n");
         }
 
-        message.append("Landmark Recognition:\n");
+        message.append("Landmark Detection:\n");
         if (landmarks != null) {
             for (EntityAnnotation landmark : landmarks) {
                 message.append(String.format(Locale.US, "%.3f: %s", landmark.getScore(), landmark.getDescription()));
