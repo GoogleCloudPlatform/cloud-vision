@@ -16,7 +16,7 @@
 # https://github.com/GoogleCloudPlatform/python-docker
 FROM gcr.io/google_appengine/python
 
-RUN virtualenv /env
+RUN virtualenv -p python3 /env
 
 ENV VIRTUAL_ENV /env
 ENV PATH /env/bin:$PATH
