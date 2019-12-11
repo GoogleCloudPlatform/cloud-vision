@@ -34,8 +34,8 @@ def index():
 
 
 @app.route('/label/<label>')
-def label(label):
-    images = storage.get_images(label)
+def label(label):    
+    images = [image.decode("utf-8") for image in storage.get_images(label)]
     return render_template('label.html', images=images)
 
 
