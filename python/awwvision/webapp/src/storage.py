@@ -36,4 +36,6 @@ class Storage(object):
         if not labels:
             return {}
         keys = [u'repr_img:{}'.format(label) for label in labels]
-        return dict(zip(labels, self.redis.mget(*keys)))
+        labels_and_images = dict(zip(labels, self.redis.mget(*keys)))
+        return {label: labels_and_images.get(label).decode('utf-8') for label in
+                labels_and_images.keys()}
