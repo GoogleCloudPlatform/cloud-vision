@@ -16,12 +16,16 @@ spec:
 
 ---
 
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: awwvision-webapp
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: awwvision
+      role: frontend
   template:
     metadata:
       labels:
