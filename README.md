@@ -1,6 +1,6 @@
 ![status: inactive](https://img.shields.io/badge/status-inactive-red.svg)
 
-**This repo is being deprecated**. All new work can be found at a given
+**This repo has been deprecated**. All new work will be found at a given
 language's repo:
 
 [C# / .NET][c#] | [Go lang][golang] | [Java][java] | [Node.js][nodejs] |
